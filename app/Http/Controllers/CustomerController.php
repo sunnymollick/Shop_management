@@ -194,4 +194,8 @@ class CustomerController extends Controller
         }
         return redirect()->route('customers.index', ['customers' => $customers]);
     }
+
+    public function login(){
+        return view('customer.login.login');
+    }
 }

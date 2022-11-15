@@ -93,7 +93,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 Auth::routes();
 Route::get('/custom-logout', 'MyController@logout')->name('my.logout');
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/shop', 'HomeController@shop')->name('shop');
 Route::get('/shopByCategory/{category}', 'HomeController@shopByCategory')->name('shopByCategory');
 Route::get('/bundleShop', 'HomeController@bundleShop')->name('bundleShop');
@@ -106,6 +106,8 @@ Route::get('all/damage/products','ProductController@allDamageProduct')->name('al
 Route::get('/damage/product/autocomplete', 'ProductController@getAutocompleteData')->name('autocomplete.damage');
 Route::post('/damage/product/store', 'ProductController@damageProductStore')->name('damage.products.store');
 Route::get('/bundle/{bundle}', 'ProductController@showBundle')->name('bundle');
+
+Route::get('/','CustomerController@login');
 
 
 
