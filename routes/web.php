@@ -4,6 +4,7 @@
 // use App\Http\Controllers\OrderController;
 // use App\Product;
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
@@ -11,20 +12,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
+Route::resource('customers', 'CustomerController');
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Route::get('/', 'DashboardController@index')->name('dashboard');
 
-    Route::get('/',[DashboardController::class,'index'])->name('dashboard');
+    Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
 
 
-    Route::resource('customers', 'CustomerController');
     Route::get('customers/{customer}/delete', 'CustomerController@delete')->name('customers.delete');
     Route::get('customer/order/view/{id}', 'CustomerController@customerOrders')->name('customers.orders');
 
     Route::resource('products', 'ProductController');
     Route::get('products/{product}/delete', 'ProductController@delete')->name('products.delete');
-    Route::get('stock/product','ProductController@stock')->name('stock.product');
+    Route::get('stock/product', 'ProductController@stock')->name('stock.product');
 
     Route::resource('bundles', 'BundleController');
     Route::get('bundles/{bundle}/delete', 'BundleController@delete')->name('bundles.delete');
@@ -46,13 +47,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Route::get('receipts/{orderId}/print', 'ReceiptController@printReceipt')->name('receipt.print');
 
     Route::resource('orders', 'OrderController');
-    Route::get('paid/orders','OrderController@paidOrders')->name('orders.paid_orders');
-    Route::get('due/orders','OrderController@unpaidOrders')->name('orders.due_orders');
-    Route::get('all/cancel/orders','OrderController@allCancelOrders')->name('orders.all_cancel_orders');
+    Route::get('paid/orders', 'OrderController@paidOrders')->name('orders.paid_orders');
+    Route::get('due/orders', 'OrderController@unpaidOrders')->name('orders.due_orders');
+    Route::get('all/cancel/orders', 'OrderController@allCancelOrders')->name('orders.all_cancel_orders');
 
     Route::get('orders/{order}/delete', 'OrderController@delete')->name('orders.delete');
     Route::get('orders/{order}/return', 'OrderController@return')->name('orders.return');
-    Route::post('due/orders/pay/{id}','OrderController@dueOrderPay')->name('due.paid');
+    Route::post('due/orders/pay/{id}', 'OrderController@dueOrderPay')->name('due.paid');
     // Order return route
 
 
@@ -85,9 +86,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Suppliers Routes Go here
     Route::resource('suppliers', 'SupplierController');
-    Route::get('delete/customer/{id}','SupplierController@delete')->name('suppliers.delete');
-
-
+    Route::get('delete/customer/{id}', 'SupplierController@delete')->name('suppliers.delete');
 });
 
 Auth::routes();
@@ -101,17 +100,19 @@ Route::get('/about', 'HomeController@about')->name('about');
 Route::get('/contact', 'HomeController@contact')->name('contact');
 
 Route::get('/product/{product}', 'ProductController@showProduct')->name('product');
-Route::get('add/damage/products','ProductController@damageProduct')->name('product.damage');
-Route::get('all/damage/products','ProductController@allDamageProduct')->name('all.damage.product');
+Route::get('add/damage/products', 'ProductController@damageProduct')->name('product.damage');
+Route::get('all/damage/products', 'ProductController@allDamageProduct')->name('all.damage.product');
 Route::get('/damage/product/autocomplete', 'ProductController@getAutocompleteData')->name('autocomplete.damage');
 Route::post('/damage/product/store', 'ProductController@damageProductStore')->name('damage.products.store');
 Route::get('/bundle/{bundle}', 'ProductController@showBundle')->name('bundle');
 
-Route::get('/','CustomerController@login');
+Route::get('/', [CustomerController::class,'login'])->name('customers.login');
+Route::get('/customer/register', [CustomerController::class, 'register'])->name('customer.register');
+// Route::post('/customer/register/store', [CustomerController::class, 'store'])->name('customer.store ');
 
 
 
-Route::get('/test', function (){
+Route::get('/test', function () {
     return session()->getId();
 });
 

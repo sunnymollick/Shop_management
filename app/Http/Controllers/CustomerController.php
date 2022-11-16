@@ -7,6 +7,7 @@ use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -15,21 +16,23 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $customers = Customer::where('is_deleted', 0)->get();
         return view('customer.index', ['customers' => $customers]);
     }
 
-    public function customerOrders($id){
+    public function customerOrders($id)
+    {
         // $orders = Order::where('customer_id',$id)->where('is_deleted',0)->get();
         $orders = DB::table('orders')
-                    ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
-                    ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
-                    ->where('orders.customer_id',$id)
-                    ->where('orders.is_deleted', '=', 0)
-                    ->orderBy('id', 'DESC')
-                    ->latest()
-                    ->get();
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
+            ->where('orders.customer_id', $id)
+            ->where('orders.is_deleted', '=', 0)
+            ->orderBy('id', 'DESC')
+            ->latest()
+            ->get();
 
         // $orders_value = DB::table('orders')
         //             ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
@@ -46,7 +49,7 @@ class CustomerController extends Controller
 
 
 
-        return view('customer.customer_order',['orders'=>$orders,'orders_value'=>$orders_value,'amount_paid'=>$amount_paid,'discount_value'=>$discount_value]);
+        return view('customer.customer_order', ['orders' => $orders, 'orders_value' => $orders_value, 'amount_paid' => $amount_paid, 'discount_value' => $discount_value]);
     }
 
     /**
@@ -54,7 +57,8 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         return view('customer.create');
     }
 
@@ -64,17 +68,32 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
+
+
+        // $request->validate([
+        //     'name' => 'required|max:255',
+        //     'mobile' => 'required',
+        //     'email' => 'required',
+        //     'address' => 'required',
+        //     'image' => 'image|mimes:jpg,bmp,png',
+        //     'password' => 'confirmed',
+        // ]);
+
+
         $customer = new Customer();
         $customer->name = $request->name;
         $customer->mobile = $request->mobile;
         $customer->address = $request->address;
+        $customer->email = $request->email;
+        $customer->password = Hash::make($request->password);;
 
         if ($request->hasFile('image')) {
             $image           = $request->file('image');
-            $name            = time().'.'.$image->getClientOriginalExtension();
+            $name            = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/customer_image');
-            $file_path       = 'customer_image/'.$name;
+            $file_path       = 'customer_image/' . $name;
             $image->move($destinationPath, $name);
         }
 
@@ -86,14 +105,13 @@ class CustomerController extends Controller
         if ($file_path) {
             $customer->image  = $file_path;
         }
-
         if ($customer->save()) {
             Session::flash('customer_add_message', 'Customer Added Successfully!');
         } else {
             Session::flash('customer_add_message', 'Customer Adding Failed!');
             Session::flash('alert-class', 'alert-danger');
         }
-        return back();
+        return redirect()->to('/');
     }
 
     /**
@@ -102,8 +120,8 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-
+    public function show($id)
+    {
     }
 
     /**
@@ -112,7 +130,8 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $customer = Customer::findOrFail($id);
         return view('customer.edit', ['customer' => $customer]);
     }
@@ -124,14 +143,15 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $customer = Customer::findOrFail($id);
 
         if ($request->hasFile('image')) {
             $image           = $request->file('image');
-            $name            = time().'.'.$image->getClientOriginalExtension();
+            $name            = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/customer_image');
-            $file_path       = 'customer_image/'.$name;
+            $file_path       = 'customer_image/' . $name;
             $image->move($destinationPath, $name);
             unlink($customer->image);
 
@@ -175,7 +195,8 @@ class CustomerController extends Controller
         //
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $customer = Customer::findOrFail($id);
         $customer->is_deleted = 1;
         unlink($customer->image);
@@ -195,7 +216,12 @@ class CustomerController extends Controller
         return redirect()->route('customers.index', ['customers' => $customers]);
     }
 
-    public function login(){
+    public function login()
+    {
         return view('customer.login.login');
+    }
+    public function register()
+    {
+        return view('customer.signup.registration');
     }
 }
