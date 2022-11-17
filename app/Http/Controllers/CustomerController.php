@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Order;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Ui\Presets\React;
 
 class CustomerController extends Controller
 {
@@ -88,7 +90,7 @@ class CustomerController extends Controller
         $customer->address = $request->address;
         $customer->email = $request->email;
         $customer->password = Hash::make($request->password);;
-
+        $file_path = '';
         if ($request->hasFile('image')) {
             $image           = $request->file('image');
             $name            = time() . '.' . $image->getClientOriginalExtension();
@@ -102,7 +104,18 @@ class CustomerController extends Controller
         $customer->passport = $request->passport;
         $customer->comment = $request->comment;
 
-        if ($file_path) {
+        $user = new User();
+
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->is_admin = 5;
+
+        $user->save();
+
+
+        if ($file_path != '') {
             $customer->image  = $file_path;
         }
         if ($customer->save()) {
@@ -111,7 +124,20 @@ class CustomerController extends Controller
             Session::flash('customer_add_message', 'Customer Adding Failed!');
             Session::flash('alert-class', 'alert-danger');
         }
-        return redirect()->to('/');
+        return redirect()->route('customers.login');
+    }
+
+    public function loginStore(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        $user = Customer::where('email', '=', $email)->first();
+        if (Hash::check($password, $user->password)) {
+            # code...
+            Session::put('role', 'customer');
+            Session::put('userId', $user->id);
+            return redirect('/login');
+        }
     }
 
     /**
@@ -181,6 +207,10 @@ class CustomerController extends Controller
             Session::flash('customer_update_message', 'Customer Updating Failed!');
             Session::flash('alert-class', 'alert-danger');
         }
+
+
+
+
         return back();
     }
 

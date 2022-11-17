@@ -10,14 +10,14 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Session;
 
 Route::resource('customers', 'CustomerController');
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Route::get('/', 'DashboardController@index')->name('dashboard');
 
-    Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 
     Route::get('customers/{customer}/delete', 'CustomerController@delete')->name('customers.delete');
@@ -108,12 +108,18 @@ Route::get('/bundle/{bundle}', 'ProductController@showBundle')->name('bundle');
 
 Route::get('/', [CustomerController::class,'login'])->name('customers.login');
 Route::get('/customer/register', [CustomerController::class, 'register'])->name('customer.register');
+Route::post('/customer/login', [CustomerController::class, 'loginStore'])->name('customer.login.store');
 // Route::post('/customer/register/store', [CustomerController::class, 'store'])->name('customer.store ');
 
 
 
 Route::get('/test', function () {
     return session()->getId();
+});
+
+Route::get('session/flash',function(){
+    Session::flush();
+    return redirect('/');
 });
 
 // require_once 'SimpleXLSX.php';

@@ -49,26 +49,46 @@
         <div class="container">
             <div id="login-row" class="row justify-content-center align-items-center">
                 <div id="login-column" class="col-md-6">
-                    <div id="login-box" class="col-md-12">
-                        <form id="login-form" class="form" action="" method="post">
-                            <h3 class="text-center text-info">Login as Customer</h3>
+                    <div id="login-box" class="col-md-12" style="padding-top: 5rem;">
+                        <div class="text-center text-info">
+                            <h3>Welcome to shop</h3>
+                            <div class="row justify-content-md-center" style="margin-top: 50px;">
+                                <div class="col col-lg-2">
+                                    <a href="{{url('/login')}}">
+
+                                        <button type="button" class="btn btn-info"> login </button>
+                                    </a>
+                                </div>
+                                <div class="col-sm-1">
+                                </div>
+                                <div class="col col-lg-2">
+                                    <a href="{{route('customer.register')}}">
+                                        <button type="button" class="btn btn-primary"> Register </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <form id="login-form" class="form" action="{{route('customer.login.store')}}" method="post">
+                            @csrf
                             <div class="form-group">
-                                <label for="username" class="text-info">Email:</label><br>
-                                <input type="text" name="username" id="username" class="form-control">
+                                <label for="email" class="text-info">Email:</label><br>
+                                <input type="eamil" name="email" id="email" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="password" class="text-info">Password:</label><br>
-                                <input type="text" name="password" id="password" class="form-control">
+                                <input type="password" name="password" id="password" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="remember-me" class="text-info"></label><br>
-                                <!-- <label for="remember-me" class="text-info"><span>Remember me</span><span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br> -->
                                 <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
                             </div>
                             <div id="register-link" class="text-right">
                                 <a href="{{route('customer.register')}}" class="text-info">Register here</a>
                             </div>
-                        </form>
+                        </form> -->
+
+
+
                     </div>
                 </div>
             </div>
