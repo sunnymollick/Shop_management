@@ -233,13 +233,17 @@
                         </a>
                         <ul class="treeview-menu">
                             <li class="{{ Request::is('orders*') ? 'active' : '' }}"><a
-                                    href="{{ route('orders.index') }}"><i class="fa fa-circle-o"></i> All Orders </a>
+                                    href="{{ route('orders.index') }}"><i class="fa fa-circle-o"></i> New Orders </a>
                             </li>
                             <li class="{{ Request::is('orders*') ? 'active' : '' }}"><a
-                                href="{{ route('orders.paid_orders') }}"><i class="fa fa-circle-o"></i> Paid Orders </a>
+                                    href="{{ route('orders.accept.payment') }}"><i class="fa fa-circle-o"></i> Accept Payments </a>
+                            </li>
+
+                            <li class="{{ Request::is('orders*') ? 'active' : '' }}"><a
+                                href="{{ route('all.process.delivery') }}"><i class="fa fa-circle-o"></i> Process Delivery </a>
                             </li>
                             <li class="{{ Request::is('orders*') ? 'active' : '' }}"><a
-                                href="{{ route('orders.due_orders') }}"><i class="fa fa-circle-o"></i> Due Orders </a>
+                                href="{{ route('all.delivery') }}"><i class="fa fa-circle-o"></i> Delivery Success</a>
                             </li>
                             <li class="{{ Request::is('orders*') ? 'active' : '' }}"><a
                                 href="{{ route('orders.all_cancel_orders') }}"><i class="fa fa-circle-o"></i> Cancel Orders </a>

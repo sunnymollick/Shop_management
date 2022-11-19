@@ -1,6 +1,4 @@
-@extends('layouts.app2')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="content-header">
         <h1>
             Dashboard
@@ -10,17 +8,18 @@
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
-        @if (Session::has('message'))
+        <?php if(Session::has('message')): ?>
             <div class="row">
                 <div class="col-md-6">
-                    <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
-                        <!-- {{ Session::get('product_add_message') }} -->
-                        {{ Session('message') }}
+                    <p class="alert <?php echo e(Session::get('alert-class', 'alert-success')); ?>">
+                        <!-- <?php echo e(Session::get('product_add_message')); ?> -->
+                        <?php echo e(Session('message')); ?>
+
                     </p>
-                    <!-- {{ Session::forget('product_add_message') }} -->
+                    <!-- <?php echo e(Session::forget('product_add_message')); ?> -->
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -30,25 +29,25 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="col-md-6">
-                            <form class="form-horizontal" id="formId" action="{{ route('category.store') }}"
-                                method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
+                            <form class="form-horizontal" id="formId" action="<?php echo e(route('category.store')); ?>"
+                                  method="POST"
+                                  enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
                                 <input type="hidden" name="id">
                                 <div class="box-body">
                                     <div class="form-group">
-                                        @if ($errors->has('title'))
+                                        <?php if($errors->has('title')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
-                                                <strong style="color: red">* {{ $errors->first('title') }}</strong>
+                                                <strong style="color: red">* <?php echo e($errors->first('title')); ?></strong>
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         <label for="title" class="col-sm-2 control-label">Title</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="name" name="name" required>
                                         </div>
                                     </div>
 
-                                    {{-- img result --}}
+                                    
 
                                 </div>
                                 <!-- /.box-body -->
@@ -81,18 +80,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php($i = 0)
-                                @foreach($categories as $row)
+                                <?php ($i = 0); ?>
+                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td>{{ $i++ }}</td>
-                                    <td>{{ $row->name }}</td>
+                                    <td><?php echo e($i++); ?></td>
+                                    <td><?php echo e($row->name); ?></td>
                                     <td>
-                                        <a href="{{ route('edit.category',$row->id) }}" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                        <a href="{{ route('delete.category',$row->id) }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                                        <a href="<?php echo e(route('edit.category',$row->id)); ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                        <a href="<?php echo e(route('delete.category',$row->id)); ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
 
                                 </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                             <tbody>
 
@@ -106,9 +105,9 @@
         </div>
 
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         // Add the following code if you want the name of the file appear on select
         $(".custom-file-input").on("change", function () {
@@ -117,4 +116,6 @@
         });
 
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\dokan\resources\views/product/category.blade.php ENDPATH**/ ?>

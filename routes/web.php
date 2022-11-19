@@ -5,6 +5,7 @@
 // use App\Product;
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
@@ -47,8 +48,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('orders', 'OrderController');
     Route::get('paid/orders','OrderController@paidOrders')->name('orders.paid_orders');
+
+    Route::get('accept/payments',[OrderController::class,'acceptPayment'])->name('orders.accept.payment');
+    Route::get('process/accept/payment/{id}',[OrderController::class,'processAcceptPayment'])->name('process.accept.payment');
+    Route::get('cancel/order/{id}',[OrderController::class,'cancelOrder'])->name('cancel.order');
+    Route::get('all/cancel/orders',[OrderController::class,'allCancelOrders'])->name('orders.all_cancel_orders');
+    Route::get('process/delivery/{id}',[OrderController::class,'processDelivery'])->name('process.delivery');
+    Route::get('all/process/delivery',[OrderController::class,'allProcessDelivery'])->name('all.process.delivery');
+    Route::get('delivery/done/{id}',[OrderController::class,'deliveryDone'])->name('delivery.done');
+
+    Route::get('all/delivery',[OrderController::class,'allDelivery'])->name('all.delivery');
+
     Route::get('due/orders','OrderController@unpaidOrders')->name('orders.due_orders');
-    Route::get('all/cancel/orders','OrderController@allCancelOrders')->name('orders.all_cancel_orders');
 
     Route::get('orders/{order}/delete', 'OrderController@delete')->name('orders.delete');
     Route::get('orders/{order}/return', 'OrderController@return')->name('orders.return');
