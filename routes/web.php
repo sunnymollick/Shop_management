@@ -6,8 +6,6 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\StockController;
-use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
