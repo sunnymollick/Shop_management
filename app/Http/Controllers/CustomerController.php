@@ -136,7 +136,7 @@ class CustomerController extends Controller
             # code...
             Session::put('role', 'customer');
             Session::put('userId', $user->id);
-            return redirect('/login');
+            return redirect('/',['user'=>$user]);
         }
     }
 

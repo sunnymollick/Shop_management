@@ -1,6 +1,4 @@
-@extends('layouts.app2')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="content-header">
         <h1>
             Dashboard
@@ -10,15 +8,16 @@
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
-        @if (Session::has('order_delete_message'))
+        <?php if(Session::has('order_delete_message')): ?>
             <div class="row">
                 <div class="col-md-6">
-                    <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
-                        {{ Session::get('order_delete_message') }}</p>
-                    {{ Session::forget('order_delete_message') }}
+                    <p class="alert <?php echo e(Session::get('alert-class', 'alert-success')); ?>">
+                        <?php echo e(Session::get('order_delete_message')); ?></p>
+                    <?php echo e(Session::forget('order_delete_message')); ?>
+
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -35,7 +34,7 @@
                                     <th>Payment Type</th>
                                     <th>Transaction ID</th>
                                     <th>Total</th>
-                                    {{-- <th>Payment Status</th> --}}
+                                    
                                     <th>Order Status</th>
                                     <th>Date</th>
                                     <th>Action</th>
@@ -43,64 +42,47 @@
                             </thead>
                             <tbody>
                                 <?php $cnt = 1; ?>
-                                @foreach ($orders as $order)
+                                <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td>{{ $cnt++ }}</td>
-                                        <td>{{ $order->cname }} - {{ $order->mobile }}</td>
+                                        <td><?php echo e($cnt++); ?></td>
+                                        <td><?php echo e($order->cname); ?> - <?php echo e($order->mobile); ?></td>
                                         <td>Bkash</td>
                                         <td>Ac-02415654845</td>
-                                        <td>{{ $order->order_value }} TK.</td>
+                                        <td><?php echo e($order->order_value); ?> TK.</td>
                                         <td>
-                                            @if ($order->order_status == 0)
+                                            <?php if($order->order_status == 0): ?>
                                                 <span class="label label-warning">Pending</span>
-                                            @elseif ($order->order_status == 1)
+                                            <?php elseif($order->order_status == 1): ?>
                                                 <span class="label label-info">Payment Accept</span>
-                                            @elseif ($order->order_status == 2)
+                                            <?php elseif($order->order_status == 2): ?>
                                                 <span class="label label-warning">Progress</span>
-                                            @elseif ($order->order_status == 3)
+                                            <?php elseif($order->order_status == 3): ?>
                                                 <span class="label label-success">Delivered</span>
-                                            @else
+                                            <?php else: ?>
                                                 <span class="label label-danger">Cancel</span>
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
 
-                                        <td>{{ date_format(date_create($order->created_at), 'm/d/Y h:i A') }}</td>
-                                        {{-- <td>{{ date_format(date_create($order->start_date), 'm/d/Y') }}</td>
-                                        @if ($order->return_date)
-                                            <td>{{ date_format(date_create($order->return_date), 'm/d/Y') }}</td>
-                                        @else
-                                            <td></td>
-                                        @endif
-
-                                        <td> --}}
-                                            {{-- @if ($order->is_return != 1)
-                                                <a onclick="return confirm('Are you sure?')"
-                                                    href="{{ route('orders.return', $order->id) }}">
-                                                    <small class="label bg-green" style="margin-right: 15px">Return</small>
-                                                </a>
-                                            @else
-                                                Returned
-                                            @endif
-                                        </td> --}}
+                                        <td><?php echo e(date_format(date_create($order->created_at), 'm/d/Y h:i A')); ?></td>
+                                        
+                                            
                                         <td>
                                             <span class="">
-                                                <a href="{{ route('orders.show', $order->id) }}">
+                                                <a href="<?php echo e(route('orders.show', $order->id)); ?>">
                                                     <small class="label bg-green" style="margin-right: 15px">View</small>
                                                 </a>
-                                                {{-- <a href="{{route('products.edit', $order->id)}}">
-                                                    <small class="label bg-yellow" style="margin-right: 15px">Edit</small>
-                                                </a> --}}
-                                                @if ($order->order_status == 0)
+                                                
+                                                <?php if($order->order_status == 0): ?>
                                                 <a onclick="return confirm('Are you sure?')"
-                                                    href="{{ route('cancel.order', $order->id) }}">
+                                                    href="<?php echo e(route('cancel.order', $order->id)); ?>">
                                                     <small class="label bg-red" style="margin-right: 15px">Cancel</small>
                                                 </a>
-                                                @endif
+                                                <?php endif; ?>
 
                                             </span>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -123,9 +105,9 @@
         </div>
 
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         $(function() {
             $('#example1').DataTable({
@@ -140,4 +122,6 @@
         });
 
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\dokan\resources\views/order/index.blade.php ENDPATH**/ ?>

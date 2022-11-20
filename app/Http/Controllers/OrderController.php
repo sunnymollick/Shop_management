@@ -23,10 +23,47 @@ class OrderController extends Controller
                     ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
                     ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
                     ->where('orders.is_deleted', '=', 0)
+                    ->where('order_status',0)
                     ->orderBy('id', 'DESC')
                     ->latest()
                     ->get();
         return view('order.index', ['orders' => $orders]);
+    }
+
+    public function acceptPayment(){
+        $orders = DB::table('orders')
+                    ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+                    ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
+                    ->where('orders.is_deleted', '=', 0)
+                    ->where('order_status',1)
+                    ->orderBy('id', 'DESC')
+                    ->latest()
+                    ->get();
+        return view('order.index', ['orders' => $orders]);
+    }
+
+    public function processAcceptPayment($id){
+        $order = Order::find($id);
+        $order->order_status = 1;
+        $order->save();
+        return redirect('admin/orders')->with('order_delete_message','payment accepted successfully');
+    }
+
+    public function cancelOrder($id){
+        $order = Order::findOrFail($id);
+        $order->order_status = 4;
+        $order->save();
+
+        $orderProducts = DB::table("order_products")
+                            ->where("order_id", "=", $id)
+                            ->get();
+
+        foreach($orderProducts as $orderProduct){
+                $product = Product::findOrFail($orderProduct->product_id);
+                $product->stock = $product->stock + $orderProduct->quantity;
+                $product->save();
+        }
+        return redirect('admin/orders')->with('order_delete_message','Order cancelled successfully');
     }
 
     public function paidOrders(){
@@ -57,12 +94,50 @@ class OrderController extends Controller
         $orders = DB::table('orders')
                     ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
                     ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
-                    ->where('orders.is_deleted', '=', 1)
+                    ->where('orders.order_status', '=', 4)
                     ->orderBy('id', 'DESC')
                     ->latest()
                     ->get();
-        return view('order.cancel_order', ['orders' => $orders]);
+        return view('order.index', ['orders' => $orders]);
     }
+
+    public function processDelivery($id){
+        $order = Order::find($id);
+        $order->order_status = 2;
+        $order->save();
+        return redirect('admin/accept/payments')->with('order_delete_message','Send to delivery');
+    }
+
+    public function allProcessDelivery(){
+        $orders = DB::table('orders')
+                    ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+                    ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
+                    ->where('orders.order_status', '=', 2)
+                    ->orderBy('id', 'DESC')
+                    ->latest()
+                    ->get();
+        return view('order.index', ['orders' => $orders]);
+    }
+
+    public function deliveryDone($id){
+        $order = Order::find($id);
+        $order->order_status = 3;
+        $order->save();
+        return redirect('admin/all/process/delivery')->with('order_delete_message','Delivered to Customer');
+    }
+
+    public function allDelivery(){
+        $orders = DB::table('orders')
+                    ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+                    ->select('orders.*', 'customers.name as cname', 'customers.mobile as mobile', 'customers.address as address')
+                    ->where('orders.order_status', 3)
+                    ->orderBy('id', 'DESC')
+                    ->latest()
+                    ->get();
+        return view('order.index', ['orders' => $orders]);
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

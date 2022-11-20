@@ -23,7 +23,7 @@
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Orders</h3>
+                        <h3 class="box-title">Pending Orders</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -35,7 +35,6 @@
                                     <th>Payment Type</th>
                                     <th>Transaction ID</th>
                                     <th>Total</th>
-                                    {{-- <th>Payment Status</th> --}}
                                     <th>Order Status</th>
                                     <th>Date</th>
                                     <th>Action</th>
@@ -90,12 +89,10 @@
                                                 {{-- <a href="{{route('products.edit', $order->id)}}">
                                                     <small class="label bg-yellow" style="margin-right: 15px">Edit</small>
                                                 </a> --}}
-                                                @if ($order->order_status == 0)
                                                 <a onclick="return confirm('Are you sure?')"
-                                                    href="{{ route('cancel.order', $order->id) }}">
+                                                    href="{{ route('orders.delete', $order->id) }}">
                                                     <small class="label bg-red" style="margin-right: 15px">Cancel</small>
                                                 </a>
-                                                @endif
 
                                             </span>
                                         </td>

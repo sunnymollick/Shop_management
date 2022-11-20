@@ -11,7 +11,8 @@ use App\OrderProduct;
 use App\Product;
 use App\Receipt;
 use App\Setting;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PosController extends Controller
 {
@@ -117,6 +118,9 @@ class PosController extends Controller
         $order->amount_paid     = $paid_amount;
         $order->advance_paid     = $paid_amount;
         $order->total_quantity  = 0;
+        $order->status_code = mt_rand(100000,999999);
+
+
 
         if (($paid_amount + $discount) == $request->totalAmount) {
             $order->is_paid = true;
@@ -125,6 +129,13 @@ class PosController extends Controller
         }
         $order->save();
         $orderId = $order->id;
+
+        $details = [
+            'title' => 'Mail for order confirmation',
+            'body' => 'your order tracking code is '.$order->status_code,
+        ];
+
+        Mail::to($customer->email)->send(new \App\Mail\SendOrderTrackingCode($details));
 
 
         $total_quantity = 0;
