@@ -180,7 +180,7 @@
 
                                         <label for="stock" class="col-sm-2 control-label"> Origin</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" id="origin" name="origin" placeholder="Enter Product Origin">
+                                            <input type="text" class="form-control" required id="origin" name="origin" placeholder="Enter Product Origin">
                                         </div>
                                     </div>
                                     <div class="form-group">

@@ -331,4 +331,12 @@ class OrderController extends Controller
 
     }
 
+    public function getOrderStatus($id){
+        $track = Order::where('status_code',$id)->first();
+        return response()->json([
+            'success' => 'success',
+            'track' => $track,
+        ]);
+    }
+
 }

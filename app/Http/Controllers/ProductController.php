@@ -22,14 +22,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         // $products = Product::where('is_deleted', 0)->with('category')->latest()->get();
-        $products = Product::join('suppliers','products.supplier_id','suppliers.id')
-                                ->select('products.*','suppliers.name as supplier')
-                                ->where('products.is_deleted', 0)
-                                ->with('category')
-                                // ->latest()
-                                ->get();
+        $products = Product::join('suppliers', 'products.supplier_id', 'suppliers.id')
+            ->select('products.*', 'suppliers.name as supplier')
+            ->where('products.is_deleted', 0)
+            ->with('category')
+            // ->latest()
+            ->get();
         return view('product.index', ['products' => $products]);
     }
 
@@ -38,10 +39,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         $categories = Category::all();
         $suppliers = Supplier::all();
-        return view('product.create',['categories'=>$categories,'suppliers'=>$suppliers]);
+        return view('product.create', ['categories' => $categories, 'suppliers' => $suppliers]);
     }
 
     /**
@@ -50,7 +52,8 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'title' => 'bail|required|max:255',
             'description' => 'max:5000',
@@ -62,12 +65,11 @@ class ProductController extends Controller
             'price' => 'required',
             'customFile' => 'bail|mimes:png,jpg,jpeg|max:2048',
         ]);
-
         if ($request->hasFile('customFile')) {
             $image           = $request->file('customFile');
-            $name            = time().'.'.$image->getClientOriginalExtension();
+            $name            = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads');
-            $file_path       = 'uploads/'.$name;
+            $file_path       = 'uploads/' . $name;
             $image->move($destinationPath, $name);
         }
 
@@ -125,12 +127,13 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $product = Product::findOrFail($id);
         // dd($product);
         $categories = Category::all();
         $suppliers = Supplier::all();
-        return view('product.edit', ['product' => $product,'categories'=>$categories,'suppliers'=>$suppliers]);
+        return view('product.edit', ['product' => $product, 'categories' => $categories, 'suppliers' => $suppliers]);
     }
 
     /**
@@ -140,7 +143,8 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'title' => 'bail|required|max:255',
             'description' => 'max:1000',
@@ -157,9 +161,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         if ($request->hasFile('customFile')) {
             $image           = $request->file('customFile');
-            $name            = time().'.'.$image->getClientOriginalExtension();
+            $name            = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads');
-            $file_path       = 'uploads/'.$name;
+            $file_path       = 'uploads/' . $name;
             $image->move($destinationPath, $name);
             unlink($product->image_path);
 
@@ -207,12 +211,14 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $products = Product::where('is_deleted', 0)->latest()->get();
         return view('product.index', ['products' => $products]);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $product = Product::findOrFail($id);
         $product->is_deleted = 1;
         if ($product->save()) {
@@ -236,66 +242,75 @@ class ProductController extends Controller
         return view('ecommerce.bundle-details')->with('bundle', $bundle);
     }
 
-    public function createCategory(){
+    public function createCategory()
+    {
         $categories = Category::all();
-        return view('product.category',['categories'=> $categories]);
+        return view('product.category', ['categories' => $categories]);
     }
 
-    public function categoryCreate(Request $request){
+    public function categoryCreate(Request $request)
+    {
         $category = new Category();
 
         $category->name = $request->name;
         if ($category->save()) {
-            return redirect()->back()->with('message','Category Added Successfully');
+            return redirect()->back()->with('message', 'Category Added Successfully');
         }
     }
 
-    public function editCategory($id){
+    public function editCategory($id)
+    {
         $category = Category::find($id);
-        return view('product.edit_category',['category'=>$category]);
+        return view('product.edit_category', ['category' => $category]);
     }
 
-    public function categoryUpdate(Request $request,  $id){
+    public function categoryUpdate(Request $request,  $id)
+    {
         $category = Category::find($id);
         $category->name = $request->name;
         if ($category->save()) {
-            return redirect()->to('admin/create/category')->with('message','Category Updated Successfully');
+            return redirect()->to('admin/create/category')->with('message', 'Category Updated Successfully');
         }
     }
 
-    public function deleteCategory($id){
+    public function deleteCategory($id)
+    {
         $category = Category::find($id);
         if ($category->delete()) {
-            return redirect()->to('admin/create/category')->with('message','Category deleted Successfully');
+            return redirect()->to('admin/create/category')->with('message', 'Category deleted Successfully');
         }
     }
 
-    public function stock(){
-        $products = Product::join('suppliers','products.supplier_id','suppliers.id')
-            ->select('products.*','suppliers.name as supplier')
+    public function stock()
+    {
+        $products = Product::join('suppliers', 'products.supplier_id', 'suppliers.id')
+            ->select('products.*', 'suppliers.name as supplier')
             ->where('products.is_deleted', 0)
             ->with('category')
             ->latest()
             ->get();
-    return view('report.stock', ['products' => $products]);
+        return view('report.stock', ['products' => $products]);
     }
 
-    public function damageProduct(){
+    public function damageProduct()
+    {
         $categories = Category::all();
         $products = Product::all();
-        return view('report.damages',[
-                        'categories'=> $categories,
-                        'products'=> $products,
-                    ]);
+        return view('report.damages', [
+            'categories' => $categories,
+            'products' => $products,
+        ]);
     }
 
-    public function getAutocompleteData(Request $request){
-        if($request->has('term')){
-            return Product::where('art_no','like','%'.$request->input('term').'%')->get();
+    public function getAutocompleteData(Request $request)
+    {
+        if ($request->has('term')) {
+            return Product::where('art_no', 'like', '%' . $request->input('term') . '%')->get();
         }
     }
 
-    public function damageProductStore(Request $request){
+    public function damageProductStore(Request $request)
+    {
         $damage = new Damage();
         $damage->product_name = $request->product_name;
         $damage->category_id = $request->category_id;
@@ -304,14 +319,14 @@ class ProductController extends Controller
         $damage->loss_amount = $request->loss_amount;
         $damage->damage_note = $request->damage_note;
         $damage->save();
-        return redirect()->back()->with('message','Damage Product Added Successfully');
+        return redirect()->back()->with('message', 'Damage Product Added Successfully');
     }
 
-    public function allDamageProduct(){
-        $products = Damage::join('categories','damages.category_id','categories.id')
-                                ->select('damages.*','categories.name as category')
-                                ->get();
-        return view('report.damage_index',['products'=>$products]);
+    public function allDamageProduct()
+    {
+        $products = Damage::join('categories', 'damages.category_id', 'categories.id')
+            ->select('damages.*', 'categories.name as category')
+            ->get();
+        return view('report.damage_index', ['products' => $products]);
     }
-
 }

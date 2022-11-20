@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-
+ 
 @section('content')
 <section class="content-header">
 <h1>
@@ -49,8 +49,8 @@
                 </div>
             </div>
             <br>
-
-
+ 
+ 
             <div class="row products" id="products">
                 <div class="col-md-12">
                     <div class="timeline-body">
@@ -80,8 +80,8 @@
                     </div>
                 </div>
             </div>
-
-
+ 
+ 
             <div class="row bundles" id="bundles">
                 <div class="col-md-12">
                     <div class="timeline-body">
@@ -211,7 +211,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+ 
                                 </tbody>
                             </table>
                             <div class="row">
@@ -291,7 +291,7 @@
                                     </div>
                                     <!-- /input-group -->
                                 </div>
-
+ 
                                 <div class="col-lg-6">
                                     <br>
                                     <div class="input-group">
@@ -302,7 +302,7 @@
                                     </div>
                                     <!-- /input-group -->
                                 </div>
-
+ 
                                 <div class="col-lg-6">
                                     <br>
                                     <div class="input-group">
@@ -313,7 +313,7 @@
                                     </div>
                                     <!-- /input-group -->
                                 </div>
-
+ 
                                 <div class="col-lg-6">
                                     <br>
                                     <div class="input-group">
@@ -330,7 +330,7 @@
                                     </div>
                                     <!-- /input-group -->
                                 </div>
-
+ 
                                 <div class="col-lg-6" id="transaction_code">
                                     <br>
                                     <div class="input-group">
@@ -341,8 +341,8 @@
                                     </div>
                                     <!-- /input-group -->
                                 </div>
-
-
+ 
+ 
                                 <div class=" col-lg-12 text-center">
                                     <br>
                                     <button type="submit"
@@ -351,7 +351,7 @@
                                         id="makeOrder">Make Order</button>
                                 </div>
                                 <!-- /.col-lg-6 -->
-
+ 
                             </div>
                         </div>
                     </form>
@@ -364,22 +364,22 @@
 </div>
 </div>
 </div>
-
+ 
 </section>
 @endsection
-
+ 
 @push('js')
-
+ 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
+ 
     <script>
         $(document).ready(function(){
             // if ($("#discount").change == true) {
             //     alert("Hi");
             // }
-
+ 
             $("#discount").change(function(){
                 var netPay = $("#totalAmount").val() - $("#discount").val();
                 document.getElementById("netpay").value = netPay;
@@ -387,7 +387,7 @@
             });
         });
     </script>
-
+ 
     <script>
         $(document).ready(function(){
             $("#transaction_code").hide();
@@ -398,7 +398,7 @@
                 $("#transaction_code").hide();
             }
         });
-
+ 
         $('#payment_bank').on('click', function () {
             if ($(this).prop('checked') == true) {
                 $("#transaction_code").show();
@@ -406,7 +406,7 @@
                 $("#transaction_code").hide();
             }
         });
-
+ 
         $('#payment_cash').on('click', function () {
             if ($(this).prop('checked') == true) {
                 $("#transaction_code").hide();
@@ -414,65 +414,65 @@
                 $("#transaction_code").show();
             }
         });
-
+ 
     });
-
+ 
     </script>
     {{-- <script>
         $(document).ready(function(){
-
+ 
         });
     </script> --}}
-
-
-
-
+ 
+ 
+ 
+ 
     <script type="text/javascript">
         $(function() {
             $('.select2').select2()
         });
-
+ 
         // function alertOnEmptyCart() {
         //     if (document.getElementById('dynamic_field').rows.length < 2) {
-
+ 
         //     }
         // }
         // Search
-
+ 
         // Bundle and product showing toggle button
         var productBtn = document.getElementById("productBtn");
         var boundleBtn = document.getElementById("boundleBtn");
-
+ 
         var products = document.getElementById("products");
         var bundles = document.getElementById("bundles");
         var categoryTitle = document.getElementById("categoryTitle");
-
+ 
         bundles.style.display = "none"
-
+ 
         function selectProductShow() {
-
+ 
             productBtn.classList.remove("btn-secondary");
             boundleBtn.classList.remove("btn-info");
             productBtn.classList.add("btn-info");
-
+ 
             products.style.display = "block"
             bundles.style.display = "none"
             categoryTitle.innerText = "Products"
         }
-
+ 
         function selectBundleShow() {
-
+ 
             boundleBtn.classList.remove("btn-secondary");
             productBtn.classList.remove("btn-info");
             boundleBtn.classList.add("btn-info");
-
+ 
             bundles.style.display = "block"
             products.style.display = "none"
             categoryTitle.innerText = "Boundles"
         }
-
+ 
         function selectBundle(id) {
-
+ 
             var isRemove = false;
             var styleValue = document.getElementById("img-bn-" + id).style.border;
             console.log(styleValue);
@@ -485,26 +485,26 @@
                 isRemove = false;
                 document.getElementById("img-bn-" + id).style.border = '5px solid green';
             }
-
+ 
             fetch('http://127.0.0.1:8000/api/bundle-products/' + id)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(a => onImageClick(a.id, a.unit_price, a.title, a.art_no, a.stock, a.quantity, isRemove, true))
                 });
         }
-
-
+ 
+ 
         const pId = [
             @foreach ($products as $p)
                 [{{ $p->id }}, "{{ $p->title }}" , "{{ $p->art_no }}"],
             @endforeach
         ];
-
+ 
         var i = 0;
-
+ 
         function productSearchFunction() {
             var x = document.getElementById("productSearch").value;
-
+ 
             if (x == '') {
                 console.log('All products:');
                 pId.forEach(function(value) {
@@ -550,7 +550,7 @@
                 }
                 document.getElementById("img-" + prodId).style.border = '5px solid green';
                 // add row in cart
-
+ 
                 var table = document.getElementById('dynamic_field');
                 var rowCount = document.getElementById('dynamic_field').rows.length;
                 var row = table.insertRow(rowCount);
@@ -563,11 +563,11 @@
                 var cell4 = row.insertCell(4);
                 var cell5 = row.insertCell(5);
                 var cell6 = row.insertCell(6);
-
+ 
                 cell0.innerHTML = artNo;
                 cell1.innerHTML = title;
-
-
+ 
+ 
                 cell2.innerHTML =
                     '<input type="number" name="quantity[]" id="quantity[]" class="form-control qty" value="' +
                     prevQuantity + '" min="1" max="' +
@@ -576,15 +576,15 @@
                     '<input type="text" name="unitPrice[]" class="form-control" value="'+unitPrice+'" onchange="matchUnitAndSubTotal()"/>';
                 cell4.innerHTML =
                     '<input type="text" name="subTotal[]" id="subTotal[]" class="form-control subtotal" value=""/>';
-
+ 
                 cell5.innerHTML = '<button type="button" name="remove" id="' + rowCount +
                     '" class="btn btn-danger btn_remove" onclick="removeProductOnCross(' + prodId + ')">X</button>';
-
+ 
                 cell6.innerHTML = '<input type="hidden" name="productId[]" id="productId[]" class="form-control" value="' +
                     prodId + '"/>';
             }
         }
-
+ 
         function removeProductOnCross(button_id) {
             var rowId = 'row' + button_id;
             var row = document.getElementById(rowId);
@@ -593,7 +593,7 @@
         }
         // Image select End
         // Update Form Fileds
-
+ 
         function calculatex() {
             var table = document.getElementById("dynamic_field");
             var totQty = 0;
@@ -605,7 +605,7 @@
             }
             var totalQty = document.getElementById('totalQty');
             totalQty.value = sum;
-
+ 
             const val2 = document.querySelectorAll('.form-control.subtotal');
             let sum2 = 0.0;
             for (let v of val2) {
@@ -614,33 +614,33 @@
             }
             // var returnDateElement = document.getElementById('returnDate');
             // var returnDate = returnDateElement.value;
-
+ 
             // Start date new added
             var startDateElement = document.getElementById('startDate');
             var startDate = startDateElement.value;
-
+ 
             // const date1 = new Date(returnDate);
             // const date2 = new Date(startDate);
             // const diffTime = Math.abs(date2 - date1) + 1;
             // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+ 
             // Showing time difference from start date to end date
             // document.getElementById("rentTime").innerHTML = diffDays + " days for rent";
-
+ 
             var totalAmount = document.getElementById('totalAmount');
             totalAmount.value = sum2;
-
+ 
             // diffDays
             //     ?
             //     totalAmount.value = sum2 * diffDays :
             //     totalAmount.value = sum2;
-
+ 
             var netPay =  document.getElementById('netpay');
             netPay.value = sum2;
-
-
+ 
+ 
         }
-
+ 
         function matchUnitAndSubTotal() {
             var table = document.getElementById('dynamic_field');
             for (var i = 1, row; row = table.rows[i]; i++) {
@@ -648,7 +648,7 @@
                     .querySelector("input").value;
             }
         }
-
+ 
         function checkButton() {
             var button = document.getElementById('makeOrder');
             if (document.getElementById('dynamic_field').getElementsByTagName('tr').length > 1) {
@@ -657,9 +657,9 @@
                 button.style.display = 'none';
             }
         }
-
-
-
+ 
+ 
+ 
         $(function() {
             $('.datetimepicker1').daterangepicker({
                 autoUpdateInput: false,
@@ -675,12 +675,12 @@
             $('.datetimepicker1').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
-
+ 
             $(document).ready(function() {
                 setInterval("checkButton()", 500);
             });
         });
-
+ 
     </script>
-
+ 
 @endpush
