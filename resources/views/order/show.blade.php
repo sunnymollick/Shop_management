@@ -179,7 +179,10 @@
                     @endif --}}
 
                 @if ($order->order_status == 0)
+                    @if(Auth::user()->is_admin==5)
+                    @else
                     <a href="{{ route('process.accept.payment',$order->id) }}" class="btn btn-info pull-right" style="margin-right: 5px;"><i class="fa fa-money"></i> Payment Accept</a>
+                    @endif
                     <a href="{{ route('cancel.order',$order->id) }}" class="btn btn-danger pull-right" style="margin-right: 5px;">Cancel Order</a>
                 @elseif ($order->order_status == 1)
                     <a href="{{ route('process.delivery',$order->id) }}" class="btn btn-info pull-right">Process Delivery</a>

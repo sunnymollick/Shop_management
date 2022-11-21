@@ -88,10 +88,13 @@ class PosController extends Controller
             $customer->save();
             $customerId   = $customer->id;
             $customerName = $request->customerName;
-        }else{
+        }else if(isset($request->customerId)){
             $customerInfo = explode(",", $request->customerId);
             $customerId = $customerInfo[0];
             $customerName = $customerInfo[1];
+        }else{
+            $customerId = Auth::user()->id;
+            $customerName = Auth::user()->name;
         }
         $discount = 0;
         if (isset($request->discount)) {

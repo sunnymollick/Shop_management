@@ -159,7 +159,10 @@
                     
 
                 <?php if($order->order_status == 0): ?>
+                    <?php if(Auth::user()->is_admin==5): ?>
+                    <?php else: ?>
                     <a href="<?php echo e(route('process.accept.payment',$order->id)); ?>" class="btn btn-info pull-right" style="margin-right: 5px;"><i class="fa fa-money"></i> Payment Accept</a>
+                    <?php endif; ?>
                     <a href="<?php echo e(route('cancel.order',$order->id)); ?>" class="btn btn-danger pull-right" style="margin-right: 5px;">Cancel Order</a>
                 <?php elseif($order->order_status == 1): ?>
                     <a href="<?php echo e(route('process.delivery',$order->id)); ?>" class="btn btn-info pull-right">Process Delivery</a>
