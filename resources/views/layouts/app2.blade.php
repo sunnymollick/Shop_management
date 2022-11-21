@@ -248,7 +248,7 @@
                     @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0|| (Auth::user()->is_admin) == 5 )
                     <li class="{{ Request::is('pos*') ? 'active' : '' }}">
                         <a href="{{ route('pos.index') }}">
-                            <i class="fa fa-line-chart"></i> <span>Point Of Sale</span>
+                            <i class="fa fa-line-chart"></i> <span>@if((Auth::user()->is_admin) == 5) Place Order @else Point Of Sale @endif</span>
                         </a>
                     </li>
                     @endif

@@ -250,7 +250,7 @@
                     <?php if((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0|| (Auth::user()->is_admin) == 5 ): ?>
                     <li class="<?php echo e(Request::is('pos*') ? 'active' : ''); ?>">
                         <a href="<?php echo e(route('pos.index')); ?>">
-                            <i class="fa fa-line-chart"></i> <span>Point Of Sale</span>
+                            <i class="fa fa-line-chart"></i> <span><?php if((Auth::user()->is_admin) == 5): ?> Place Order <?php else: ?> Point Of Sale <?php endif; ?></span>
                         </a>
                     </li>
                     <?php endif; ?>

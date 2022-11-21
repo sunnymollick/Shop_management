@@ -132,17 +132,43 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Update information</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <form>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text" class="form-control" id="exampleInputName1" name="name" value="<?php echo e($user->name); ?>" aria-describedby="nameHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="<?php echo e($user->email); ?>" aria-describedby="emailHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Mobile</label>
+    <input type="text" class="form-control" name="mobile" value="<?php echo e($user->mobile); ?>" id="exampleInputphone1" aria-describedby="emailHelp">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Old Password</label>
+    <input type="password" class="form-control" name="oldPassword" id="exampleInputPassword1">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">New Password</label>
+    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Confirm Password</label>
+    <input type="password" class="form-control" name="password_confirmation" id="exampleInputConfirmPassword1">
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </div>
+        </form>
       </div>
     </div>
   </div>
@@ -316,12 +342,11 @@
 
                 <?php if(Auth::user()->is_admin==5): ?>
 <?php else: ?> -->
- <div class="col-md-6">
+ <!-- <div class="col-md-6">
     <div class="box">
         <div class="box-header">
             <h3 class="box-title text-danger">Products Alert</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <table id="example1" class="table table-bordered table-striped table-responsive">
                 <thead>
@@ -397,7 +422,6 @@
                 </tfoot>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
 </div>
 <div class="col-md-6">
@@ -405,7 +429,6 @@
         <div class="box-header">
             <h3 class="box-title text-success">Recent Sale</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <table id="example2" class="table table-bordered table-striped table-responsive">
                 <thead>
@@ -461,9 +484,8 @@
                 </tfoot>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
-</div>
+</div> -->
 <?php endif; ?>
     </div>
 
