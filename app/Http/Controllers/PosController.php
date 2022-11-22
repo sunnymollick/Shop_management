@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Bundle;
+use App\Category;
 use App\Customer;
 use App\Invoice;
 use App\Order;
@@ -11,7 +12,7 @@ use App\OrderProduct;
 use App\Product;
 use App\Receipt;
 use App\Setting;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 
 class PosController extends Controller
 {
@@ -20,12 +21,14 @@ class PosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $products = Product::where('is_deleted', 0)
-                            ->where('stock', '>', 0)
-                            ->latest()->get();
+            ->where('stock', '>', 0)
+            ->latest()->get();
         $customers = Customer::where('is_deleted', 0)->get();
         $bundles = Bundle::where('is_deleted', 0)->get();
+        // $categories = Category::all();
         return view('pos.index', ['products' => $products, 'customers' => $customers, 'bundles' => $bundles]);
     }
 
@@ -45,7 +48,8 @@ class PosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         // dd($request->all());
         // return $request;
         // $customerId = 1;
@@ -62,9 +66,9 @@ class PosController extends Controller
             }
             if ($request->hasFile('image')) {
                 $image           = $request->file('image');
-                $name            = time().'.'.$image->getClientOriginalExtension();
+                $name            = time() . '.' . $image->getClientOriginalExtension();
                 $destinationPath = public_path('/customer_image');
-                $file_path       = 'customer_image/'.$name;
+                $file_path       = 'customer_image/' . $name;
                 $image->move($destinationPath, $name);
                 $customer->image = $file_path;
             }
@@ -83,7 +87,7 @@ class PosController extends Controller
             $customer->save();
             $customerId   = $customer->id;
             $customerName = $request->customerName;
-        }else{
+        } else {
             $customerInfo = explode(",", $request->customerId);
             $customerId = $customerInfo[0];
             $customerName = $customerInfo[1];
@@ -99,7 +103,7 @@ class PosController extends Controller
         }
 
         // New start date
-        $a = date_create_from_format("m/d/Y",$request->startDate);
+        $a = date_create_from_format("m/d/Y", $request->startDate);
         // dd($a);
         $startDate = $a->format('Y-m-d');
 
@@ -130,8 +134,8 @@ class PosController extends Controller
         $total_quantity = 0;
         // Create Order-Products
         if (isset($request->productId)) {
-            foreach ($request->productId as $idx => $pid ) {
-                $all_array[] = [ $pid, $request->subTotal[$idx], $request->quantity[$idx] ];
+            foreach ($request->productId as $idx => $pid) {
+                $all_array[] = [$pid, $request->subTotal[$idx], $request->quantity[$idx]];
                 $op = new OrderProduct();
                 $op->order_id = $orderId;
                 $op->product_id = $pid;
@@ -153,7 +157,6 @@ class PosController extends Controller
             $order = Order::findOrFail($orderId);
             $order->total_quantity = $total_quantity;
             $order->save();
-
         }
 
         // create invoice
@@ -162,7 +165,7 @@ class PosController extends Controller
         $presence = $customerInvoices->count();
         $newNum = (int)$presence + 1;
         $invoice = new Invoice();
-        $invoice->invoice_id = $settings->invoice_prefix.$customerId.$newNum;
+        $invoice->invoice_id = $settings->invoice_prefix . $customerId . $newNum;
         $invoice->order_id = $orderId;
         $invoice->issue_date = date('Y-m-d');
 
@@ -187,25 +190,24 @@ class PosController extends Controller
             $account->customer_name = $customerName;
             if (($paid_amount + $discount) == $request->totalAmount) {
                 $account->category      = 'Final Payment';
-            }else{
+            } else {
                 $account->category      = 'Advance Payment';
             }
 
             if ($request->transaction_code) {
                 $account->transaction_code = $request->transaction_code;
-            }else{
+            } else {
                 $account->transaction_code = 'Cash';
             }
 
             if ($request->ref) {
                 $account->reference     = $request->ref;
-            }else{
+            } else {
                 $account->reference     = 'Self';
             }
 
             // $account->description   = $customer_name;
             $account->save();
-
         }
 
         // return back();
@@ -215,9 +217,9 @@ class PosController extends Controller
 
 
         // if receipt
-            // return with invoiceId, receiptId to printBothButton
+        // return with invoiceId, receiptId to printBothButton
         // else
-            // return with invoiceId to printInvoiceButton
+        // return with invoiceId to printInvoiceButton
     }
 
     /**

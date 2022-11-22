@@ -1,6 +1,6 @@
-@extends('layouts.app2')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <section class="content-header">
     <h1>
@@ -18,14 +18,14 @@
         <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
-                <h4>{{$total_products}}</h4>
+                <h4><?php echo e($total_products); ?></h4>
 
                 <p>Total Products</p>
                 </div>
                 <div class="icon">
                 <i class="fa fa-camera"></i>
                 </div>
-                <a href="{{route('products.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo e(route('products.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
@@ -34,14 +34,14 @@
         <!-- small box -->
             <div class="small-box bg-green">
                 <div class="inner">
-                <h4>{{$total_customers}}</h4>
+                <h4><?php echo e($total_customers); ?></h4>
 
                 <p>Total Customers</p>
                 </div>
                 <div class="icon">
                 <i class="fa fa-users"></i>
                 </div>
-                <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -51,14 +51,14 @@
         <!-- small box -->
             <div class="small-box bg-yellow">
                 <div class="inner">
-                <h4>{{$bill_pending_paid_amount}}Tk</h4>
+                <h4><?php echo e($bill_pending_paid_amount); ?>Tk</h4>
 
                 <p>Total Payment Paid</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-check" aria-hidden="true"></i>
                 </div>
-                <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -67,42 +67,42 @@
             <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
-                    <h4>{{$bill_pending_due_amount}}Tk</h4>
+                    <h4><?php echo e($bill_pending_due_amount); ?>Tk</h4>
 
                     <p>Total Payment Due</p>
                     </div>
                     <div class="icon">
                     <i class="fa fa-circle-o-notch" aria-hidden="true"></i>
                     </div>
-                    <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-teal">
                     <div class="inner">
-                    <h4> {{$totalTransaction}} Tk  </h4>
+                    <h4> <?php echo e($totalTransaction); ?> Tk  </h4>
 
                     <p>Total Transaction</p>
                     </div>
                     <div class="icon">
                     <i class="fa fa-money" aria-hidden="true"></i>
                     </div>
-                    <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                     <div class="small-box bg-orange">
                         <div class="inner">
-                        <h4>Total {{$total_orders}}</h4>
+                        <h4>Total <?php echo e($total_orders); ?></h4>
 
                         <p>Orders</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-database" aria-hidden="true"></i>
                         </div>
-                        <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -118,69 +118,68 @@
             <table id="example1" class="table table-bordered table-striped table-responsive">
                 <thead>
                     <tr>
-                        {{-- <th>Sr.</th> --}}
+                        
                         <th>Title</th>
                         <th>Category</th>
                         <th>Stock</th>
                         <th>SKU #</th>
-                        {{-- <th>Unit Price</th> --}}
+                        
                         <th>Image</th>
-                        @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 )
+                        <?php if((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 ): ?>
                             <th>Action</th>
-                        @endif
+                        <?php endif; ?>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {{-- @php
-                        $cnt = 1;
-                    @endphp --}}
-                    @foreach ($products as $product)
+                    
+                    <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            {{-- <td>{{ $cnt++ }}</td> --}}
-                            <td>{{ $product->title }}</td>
-                            <td>{{ $product->category ? $product->category->name : "No Category"}}</td>
+                            
+                            <td><?php echo e($product->title); ?></td>
+                            <td><?php echo e($product->category ? $product->category->name : "No Category"); ?></td>
                             <td> <span class="label bg-red">
-                                @if ($product->stock > 0)
-                                    {{ $product->stock }}
-                                @else
+                                <?php if($product->stock > 0): ?>
+                                    <?php echo e($product->stock); ?>
+
+                                <?php else: ?>
                                     <small class="label bg-red" style="">No Products Available</small>
-                                @endif
+                                <?php endif; ?>
                             </span>
                             </td>
-                            <td>{{ $product->art_no }}</td>
-                            {{-- <td>{{ $product->unit_price }}</td> --}}
+                            <td><?php echo e($product->art_no); ?></td>
+                            
                             <td>
-                                <img src="{{ asset($product->image_path)}}" height="50" , width="50">
+                                <img src="<?php echo e(asset($product->image_path)); ?>" height="50" , width="50">
                             </td>
-                            @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 )
+                            <?php if((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 ): ?>
                             <td>
                                 <span class="">
-                                    <a href="{{ route('stocks.add', $product->id) }}">
+                                    <a href="<?php echo e(route('stocks.add', $product->id)); ?>">
                                         <small class="label bg-green" style="margin-right: 15px">Add
                                             Stock</small>
                                     </a>
-                                    <a href="{{ route('products.edit', $product->id) }}">
+                                    <a href="<?php echo e(route('products.edit', $product->id)); ?>">
                                         <small class="label bg-yellow" style="margin-right: 15px">Edit</small>
                                     </a>
                                     <a onclick="return confirm('Are you sure?')"
-                                        href="{{ route('products.delete', $product->id) }}">
+                                        href="<?php echo e(route('products.delete', $product->id)); ?>">
                                         <small class="label bg-red" style="margin-right: 15px">Delete</small>
                                     </a>
                                 </span>
                             </td>
-                            @endif
+                            <?php endif; ?>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        {{-- <th>Sr.</th> --}}
+                        
                         <th>Title</th>
                         <th>Category</th>
                         <th>Stock</th>
                         <th>SKU #</th>
-                        {{-- <th>Unit Price</th> --}}
+                        
                         <th>Image</th>
                         <th>Action</th>
                     </tr>
@@ -203,77 +202,47 @@
                         <th>Sr.</th>
                         <th>Product</th>
                         <th>Customer</th>
-                        {{-- <th>Stock</th>
-                        <th>SKU #</th> --}}
-                        {{-- <th>Unit Price</th> --}}
-                        {{-- <th>Image</th>
-                        @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 )
-                        <th>Action</th>
-                        @endif --}}
+                        
+                        
+                        
                     </tr>
                 </thead>
                 <tbody>
 
-                    @php
+                    <?php
                         $cnt = 1
-                    @endphp
-                    @foreach ($order_product as $row)
+                    ?>
+                    <?php $__currentLoopData = $order_product; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $cnt++ }}</td>
-                            <td>{{ $row->product }}</td>
+                            <td><?php echo e($cnt++); ?></td>
+                            <td><?php echo e($row->product); ?></td>
                             <td>
-                                @php
+                                <?php
                                     $customer = DB::table('orders')->join('customers','orders.customer_id','customers.id')
                                                                     ->select('customers.name as customer')
                                                                     ->where('customers.id',$row->order)
                                                                     ->first();
-                                @endphp
-                                {{ $customer->customer }}
+                                ?>
+                                <?php echo e($customer->customer); ?>
+
                             </td>
-                            {{-- <td>{{ $product->category ? $product->category->name : "No Category"}}</td> --}}
-                            {{-- <td> <span class="label bg-red">
-                                @if ($product->stock > 0)
-                                    {{ $product->stock }}
-                                @else
-                                    <small class="label bg-red" style="">In Service</small>
-                                @endif
-                            </span>
-                            </td> --}}
-                            {{-- <td>{{ $product->art_no }}</td> --}}
-                            {{-- <td>{{ $product->unit_price }}</td> --}}
-                            {{-- <td>
-                                <img src="{{ asset($product->image_path)}}" height="50" , width="50">
-                            </td> --}}
-                            {{-- @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 )
-                            <td>
-                                <span class="">
-                                    <a href="{{ route('stocks.add', $product->id) }}">
-                                        <small class="label bg-green" style="margin-right: 15px">Add
-                                            Stock</small>
-                                    </a>
-                                    <a href="{{ route('products.edit', $product->id) }}">
-                                        <small class="label bg-yellow" style="margin-right: 15px">Edit</small>
-                                    </a>
-                                    <a onclick="return confirm('Are you sure?')"
-                                        href="{{ route('products.delete', $product->id) }}">
-                                        <small class="label bg-red" style="margin-right: 15px">Delete</small>
-                                    </a>
-                                </span>
-                            </td>
-                            @endif --}}
+                            
+                            
+                            
+                            
+                            
+                            
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Sr.</th>
                         <th>Product</th>
-                        {{-- <th>Category</th> --}}
-                        {{-- <th>Stock</th>
-                        <th>SKU #</th> --}}
-                        {{-- <th>Unit Price</th> --}}
-                        {{-- <th>Image</th>
-                        <th>Action</th> --}}
+                        
+                        
+                        
+                        
                     </tr>
                 </tfoot>
             </table>
@@ -285,9 +254,9 @@
 
     </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         $(function() {
             $('#example1').DataTable({
@@ -316,4 +285,6 @@
         });
 
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laravel\Inventory\Shop_management\resources\views/dashboard.blade.php ENDPATH**/ ?>

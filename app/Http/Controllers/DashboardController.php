@@ -35,8 +35,7 @@ class DashboardController extends Controller
 
         $devices_on_rent = DB::table('orders')->where('is_paid', 0)->sum('total_quantity');
         // $products = Product::where('is_deleted', 0)->where('stock','<',51)->with('category')->latest()->get();
-        $products = Product::join('suppliers','products.supplier_id','suppliers.id')
-                                ->select('products.*','suppliers.name as supplier')
+        $products = Product::select('products.*')
                                 ->where('products.is_deleted', 0)
                                 ->where('products.stock','<',51)
                                 ->with('category')

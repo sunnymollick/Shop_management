@@ -1,6 +1,6 @@
-@extends('layouts.app2')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <section class="content-header">
         <h1>
             Dashboard
@@ -10,15 +10,16 @@
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
-        @if (Session::has('product_delete_message'))
+        <?php if(Session::has('product_delete_message')): ?>
             <div class="row">
                 <div class="col-md-6">
-                    <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
-                        {{ Session::get('product_delete_message') }}</p>
-                    {{ Session::forget('product_delete_message') }}
+                    <p class="alert <?php echo e(Session::get('alert-class', 'alert-success')); ?>">
+                        <?php echo e(Session::get('product_delete_message')); ?></p>
+                    <?php echo e(Session::forget('product_delete_message')); ?>
+
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -32,85 +33,83 @@
                                 <tr>
                                     <th>Sr.</th>
                                     <th>Title</th>
-                                    {{-- <th>Description</th> --}}
-                                    {{-- <th>Category</th> --}}
+                                    
+                                    <th>Category</th>
+                                    <th>Origin</th>
                                     <th>Stock</th>
-                                    {{-- <th>Case</th> --}}
+                                    <th>Case</th>
                                     <th>SKU #</th>
                                     <th>Unit Price</th>
                                     <th>Trading Price</th>
                                     <th>MRP</th>
                                     <th>Image</th>
-                                    {{-- <th>In Service</th> --}}
+                                    
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $cnt = 1; ?>
-                                @foreach ($products as $product)
+                                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td>{{ $cnt++ }}</td>
-                                        <td>{{ $product->title }}</td>
-                                        {{-- <td>{{\Illuminate\Support\Str::limit($product->description, 100)}}</td> --}}
-                                        {{-- <td>{{ $product->category ? $product->category->name : "No Category"}} --}}
+                                        <td><?php echo e($cnt++); ?></td>
+                                        <td><?php echo e($product->title); ?></td>
+                                        
+                                        <td><?php echo e($product->category ? $product->category->name : "No Category"); ?>
 
                                         </td>
+                                        <td><?php echo e($product->origin); ?></td>
                                         <td>
-                                            {{ $product->stock }}
-                                            {{-- @if ($product->stock > 0)
-                                                {{ $product->stock }}
-                                            @else
-                                                <small class="label bg-red" style="">In Service</small>
-                                            @endif --}}
+                                            <?php echo e($product->stock); ?>
+
+                                            
                                         </td>
-                                        {{-- <td>{{ $product->case }}</td> --}}
-                                        <td>{{ $product->art_no }}</td>
-                                        <td>{{ $product->unit_price }}</td>
-                                        <td>{{ $product->trading_price }}</td>
-                                        <td>{{ $product->mrp }}</td>
+                                        <td><?php echo e($product->case); ?></td>
+                                        <td><?php echo e($product->art_no); ?></td>
+                                        <td><?php echo e($product->unit_price); ?></td>
+                                        <td><?php echo e($product->trading_price); ?></td>
+                                        <td><?php echo e($product->mrp); ?></td>
 
                                         <td>
-                                            <img src="{{ asset($product->image_path)}}" height="50" , width="50">
+                                            <img src="<?php echo e(asset($product->image_path)); ?>" height="50" , width="50">
                                         </td>
-                                        {{-- <td> --}}
-                                            {{-- {{ $product->is_in_service }} --}}
-                                            {{-- @if ($product->is_in_service != 0)
-                                                <small class="label bg-red" style="">Yes</small>
-                                            @else
-                                                <small class="label bg-green" style="">No</small>
-                                            @endif --}}
-                                        {{-- </td> --}}
+                                        
+                                            
+                                            
+                                        
                                         <td>
                                             <span class="">
-                                                <a href="{{ route('stocks.add', $product->id) }}">
+                                                <a href="<?php echo e(route('stocks.add', $product->id)); ?>">
                                                     <small class="label bg-green" style="margin-right: 15px">Add
                                                         Stock</small>
                                                 </a>
-                                                <a href="{{ route('products.edit', $product->id) }}">
+                                                <a href="<?php echo e(route('products.edit', $product->id)); ?>">
                                                     <small class="label bg-yellow" style="margin-right: 15px">Edit</small>
                                                 </a>
                                                 <a onclick="return confirm('Are you sure?')"
-                                                    href="{{ route('products.delete', $product->id) }}">
+                                                    href="<?php echo e(route('products.delete', $product->id)); ?>">
                                                     <small class="label bg-red" style="margin-right: 15px">Delete</small>
                                                 </a>
                                             </span>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Sr.</th>
                                     <th>Title</th>
-                                    {{-- <th>Description</th> --}}
-                                    {{-- <th>Category</th> --}}
+                                    
+                                    <th>Category</th>
+                                    <th>Origin</th>
                                     <th>Stock</th>
+                                    <th>Case</th>
                                     <th>SKU #</th>
                                     <th>Unit Price</th>
                                     <th>Trading Price</th>
                                     <th>MRP</th>
                                     <th>Image</th>
-                                    <th>Action</th>
+                                    
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -121,9 +120,9 @@
         </div>
 
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         $(function() {
             $('#example1').DataTable({
@@ -138,4 +137,6 @@
         });
 
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laravel\Inventory\Shop_management\resources\views/product/index.blade.php ENDPATH**/ ?>

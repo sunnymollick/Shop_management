@@ -1,6 +1,6 @@
-@extends('layouts.app2')
+
  
-@section('content')
+<?php $__env->startSection('content'); ?>
 <section class="content-header">
 <h1>
     Point Of Sale
@@ -10,20 +10,21 @@
 <!-- Main content -->
 <section class="content">
 <!-- Small boxes (Stat box) -->
-@if (Session::has('stock_add_message'))
+<?php if(Session::has('stock_add_message')): ?>
     <div class="row">
         <div class="col-md-6">
-            <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
-                {{ Session::get('stock_add_message') }}</p>
-            {{ Session::forget('stock_add_message') }}
+            <p class="alert <?php echo e(Session::get('alert-class', 'alert-success')); ?>">
+                <?php echo e(Session::get('stock_add_message')); ?></p>
+            <?php echo e(Session::forget('stock_add_message')); ?>
+
         </div>
     </div>
-@endif
+<?php endif; ?>
 <div class="row">
 <div class="col-md-12">
 <div class="box">
 <div class="box-header">
-    {{-- <h3 class="box-title"></h3> --}}
+    
 </div>
 <!-- /.box-header -->
 <div class="box-body">
@@ -54,29 +55,31 @@
             <div class="row products" id="products">
                 <div class="col-md-12">
                     <div class="timeline-body">
-                        @foreach ($products as $product)
-                            <div class="col-md-3" id="{{ $product->id }}"
+                        <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-md-3" id="<?php echo e($product->id); ?>"
                                 style="margin-left: 10px; margin-right: 10px;">
                                 <div class="row text-center">
                                     <span class="" style="margin-left: 10px;">
-                                        {{ mb_strimwidth($product->title, 0, 25, '...') }}
+                                        <?php echo e(mb_strimwidth($product->title, 0, 25, '...')); ?>
+
                                     </span>
                                 </div>
                                 <div class="row text-center">
-                                    <img src="{{ asset($product->image_path) }}" height="100" width="150"
+                                    <img src="<?php echo e(asset($product->image_path)); ?>" height="100" width="150"
                                         class="margin" style=""
-                                        onclick="onImageClick({{ $product->id }}, {{ $product->unit_price }}, '{{ strval($product->title) }}', '{{ strval($product->art_no) }}', {{ $product->stock }})"
-                                        id="img-{{ $product->id }}">
+                                        onclick="onImageClick(<?php echo e($product->id); ?>, <?php echo e($product->unit_price); ?>, '<?php echo e(strval($product->title)); ?>', '<?php echo e(strval($product->art_no)); ?>', <?php echo e($product->stock); ?>)"
+                                        id="img-<?php echo e($product->id); ?>">
                                 </div>
                                 <div class="row text-center">
-                                    Stock: {{ $product->stock }}
+                                    Stock: <?php echo e($product->stock); ?>
+
                                     <br>
-                                    Origin : {{ $product->origin }}
-                                    {{-- <br>
-                                    Unit Price : {{ $product->unit_price }} --}}
+                                    Origin : <?php echo e($product->origin); ?>
+
+                                    
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
@@ -85,47 +88,49 @@
             <div class="row bundles" id="bundles">
                 <div class="col-md-12">
                     <div class="timeline-body">
-                        @foreach ($bundles as $bundle)
-                            <div class="col-md-3" id="{{ $bundle->id }}"
+                        <?php $__currentLoopData = $bundles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bundle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-md-3" id="<?php echo e($bundle->id); ?>"
                                 style="margin-left: 10px; margin-right: 10px;">
                                 <div class="row text-center">
                                     <span class="" style="margin-left: 10px;">
-                                        {{ mb_strimwidth($bundle->name, 0, 25, '...') }}
+                                        <?php echo e(mb_strimwidth($bundle->name, 0, 25, '...')); ?>
+
                                     </span>
                                 </div>
                                 <div class="row text-center">
-                                    <img src="{{ asset('images/bundle.png') }}" height="120" width="150"
+                                    <img src="<?php echo e(asset('images/bundle.png')); ?>" height="120" width="150"
                                         class="margin" style=""
-                                        onclick="selectBundle({{ $bundle->id }})"
-                                        id="img-bn-{{ $bundle->id }}">
+                                        onclick="selectBundle(<?php echo e($bundle->id); ?>)"
+                                        id="img-bn-<?php echo e($bundle->id); ?>">
                                 </div>
                                 <div class="row text-center">
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <h3>Customer and selected items</h3>
-            {{--  --}}
+            
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" action="{{ route('pos.store') }}" enctype="multipart/form-data" method="POST">
-                        @csrf
+                    <form class="form-horizontal" action="<?php echo e(route('pos.store')); ?>" enctype="multipart/form-data" method="POST">
+                        <?php echo csrf_field(); ?>
                         <div class="box-body">
                             <div class="form-group">
-                                {{-- <label for="inputPatient" class="col-sm-2 control-label">Patient</label> --}}
+                                
                                 <div class="col-sm-10">
                                     <select class="form-control select2" id="customerId"
                                         name="customerId" style="width: 100%;">
                                         <option value="" selected>Select Register Customer</option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id .','. $customer->name }}">
-                                                {{ $customer->name }}
-                                                - {{ $customer->mobile }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $customers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $customer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($customer->id .','. $customer->name); ?>">
+                                                <?php echo e($customer->name); ?>
+
+                                                - <?php echo e($customer->mobile); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                             </div>
@@ -250,17 +255,7 @@
                                                     autocomplete="off">
                                             </div>
                                         </div>
-                                        {{-- <div class="col-lg-6">
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    Return Date
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" id="returnDate" name="returnDate"
-                                                    class="form-control datetimepicker1" required
-                                                    autocomplete="off">
-                                            </div>
-                                        </div> --}}
+                                        
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -321,7 +316,7 @@
                                         <div>
                                             <input type="radio" name="payment_method" value="Cash" id="payment_cash">
                                             <label for="">Cash</label>
-                                            {{-- <br> --}}
+                                            
                                             <input type="radio" name="payment_method" value="Bkash" id="payment_bkash">
                                             <label for="">Bkash</label>
                                             <input type="radio" name="payment_method" value="Bank Transaction" id="payment_bank">
@@ -366,9 +361,9 @@
 </div>
  
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
  
-@push('js')
+<?php $__env->startPush('js'); ?>
  
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
@@ -418,11 +413,7 @@
     });
  
     </script>
-    {{-- <script>
-        $(document).ready(function(){
- 
-        });
-    </script> --}}
+    
  
  
  
@@ -495,9 +486,9 @@
  
  
         const pId = [
-            @foreach ($products as $p)
-                [{{ $p->id }}, "{{ $p->title }}" , "{{ $p->art_no }}"],
-            @endforeach
+            <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                [<?php echo e($p->id); ?>, "<?php echo e($p->title); ?>" , "<?php echo e($p->art_no); ?>"],
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         ];
  
         var i = 0;
@@ -683,5 +674,6 @@
  
     </script>
  
-@endpush
+<?php $__env->stopPush(); ?>
  
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laravel\Inventory\Shop_management\resources\views/pos/index.blade.php ENDPATH**/ ?>

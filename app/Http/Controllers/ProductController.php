@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Bundle;
 use App\Category;
 use App\Product;
-use App\Supplier;
 use App\Damage;
 
 use Illuminate\Http\Request;
@@ -24,8 +23,7 @@ class ProductController extends Controller
      */
     public function index() {
         // $products = Product::where('is_deleted', 0)->with('category')->latest()->get();
-        $products = Product::join('suppliers','products.supplier_id','suppliers.id')
-                                ->select('products.*','suppliers.name as supplier')
+        $products = Product::select('products.*')
                                 ->where('products.is_deleted', 0)
                                 ->with('category')
                                 // ->latest()
@@ -40,8 +38,7 @@ class ProductController extends Controller
      */
     public function create() {
         $categories = Category::all();
-        $suppliers = Supplier::all();
-        return view('product.create',['categories'=>$categories,'suppliers'=>$suppliers]);
+        return view('product.create',['categories'=>$categories]);
     }
 
     /**
@@ -55,7 +52,6 @@ class ProductController extends Controller
             'title' => 'bail|required|max:255',
             'description' => 'max:5000',
             'category_id' => 'required',
-            'supplier_id' => 'required',
             'quantity' => 'required',
             'art_no' => 'required',
             'origin' => 'required',
@@ -76,7 +72,6 @@ class ProductController extends Controller
         $product->title       = $request->title;
         $product->description = $request->description;
         $product->category_id    = $request->category_id;
-        $product->supplier_id    = $request->supplier_id;
         $product->stock       = $request->quantity;
         $product->case       = $request->case;
         $product->art_no      = $request->art_no;
@@ -129,8 +124,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         // dd($product);
         $categories = Category::all();
-        $suppliers = Supplier::all();
-        return view('product.edit', ['product' => $product,'categories'=>$categories,'suppliers'=>$suppliers]);
+        return view('product.edit', ['product' => $product,'categories'=>$categories]);
     }
 
     /**
@@ -149,7 +143,6 @@ class ProductController extends Controller
             'origin' => 'required',
             'price' => 'required',
             'category_id' => 'required',
-            'supplier_id' => 'required',
             'customFile' => 'bail|mimes:png,jpg,jpeg|max:2048',
         ]);
 
@@ -178,7 +171,6 @@ class ProductController extends Controller
         $product->description = $request->description;
         // $product->category    = json_encode($request->category);
         $product->category_id = $request->category_id;
-        $product->supplier_id = $request->supplier_id;
         $product->origin = $request->origin;
         $product->stock       = $request->quantity;
         $product->case       = $request->case;
@@ -271,8 +263,7 @@ class ProductController extends Controller
     }
 
     public function stock(){
-        $products = Product::join('suppliers','products.supplier_id','suppliers.id')
-            ->select('products.*','suppliers.name as supplier')
+        $products = Product::select('products.*')
             ->where('products.is_deleted', 0)
             ->with('category')
             ->latest()

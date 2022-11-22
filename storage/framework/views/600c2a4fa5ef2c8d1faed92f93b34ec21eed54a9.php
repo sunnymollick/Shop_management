@@ -1,6 +1,6 @@
-@extends('layouts.app2')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <section class="content-header">
         <h1>
             Dashboard
@@ -10,15 +10,16 @@
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
-        @if (Session::has('product_add_message'))
+        <?php if(Session::has('product_add_message')): ?>
             <div class="row">
                 <div class="col-md-6">
-                    <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
-                        {{ Session::get('product_add_message') }}</p>
-                    {{ Session::forget('product_add_message') }}
+                    <p class="alert <?php echo e(Session::get('alert-class', 'alert-success')); ?>">
+                        <?php echo e(Session::get('product_add_message')); ?></p>
+                    <?php echo e(Session::forget('product_add_message')); ?>
+
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -28,65 +29,53 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="col-md-8">
-                            <form class="form-horizontal" id="formId" action="{{ route('products.store') }}"
+                            <form class="form-horizontal" id="formId" action="<?php echo e(route('products.store')); ?>"
                                 method="POST"
                                 enctype="multipart/form-data">
-                                @csrf
+                                <?php echo csrf_field(); ?>
                                 <input type="hidden" name="id">
                                 <div class="box-body">
                                     <div class="form-group">
-                                        @if ($errors->has('title'))
+                                        <?php if($errors->has('title')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
-                                                <strong style="color: red">* {{ $errors->first('title') }}</strong>
+                                                <strong style="color: red">* <?php echo e($errors->first('title')); ?></strong>
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         <label for="title" class="col-sm-2 control-label">Title</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" placeholder="Enter Product Title" id="title" name="title" required>
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group">
-                                        @if ($errors->has('description'))
-                                            <span class="invalid-feedback" style="" role="alert">
-                                                <strong
-                                                    style="color: red">* {{ $errors->first('description') }}</strong>
-                                            </span>
-                                        @endif
-                                        <label for="description" class="col-sm-2 control-label">Description</label>
-                                        <div class="col-sm-10">
-                                            <textarea class="form-control" id="description" name="description"
-                                            rows="3"></textarea>
-                                        </div>
-                                    </div> --}}
-                                    {{-- Added New Category --}}
+                                    
+                                    
 
-                                    {{-- Added New Category --}}
+                                    
                                     <div class="form-group">
-                                        @if ($errors->has('category'))
+                                        <?php if($errors->has('category')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
-                                                <strong style="color: red">* {{ $errors->first('category') }}</strong>
+                                                <strong style="color: red">* <?php echo e($errors->first('category')); ?></strong>
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         <label for="category" class="col-sm-2 control-label">Category</label>
                                         <div class="col-sm-10">
 
                                             <select type="text" class="form-control" id="category" name="category_id" required>
                                                 <option>Select Category</option>
-                                                @foreach($categories as $category)
+                                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                                                    <option value="{{$category->id}}">{{ $category->name }}</option>
-                                                @endforeach
+                                                    <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
 
                                         </div>
                                     </div>
-                                    {{-- Added New Category --}}
+                                    
                                     <div class="form-group">
-                                        @if ($errors->has('quantity'))
+                                        <?php if($errors->has('quantity')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
-                                                <strong style="color: red">* {{ $errors->first('quantity') }}</strong>
+                                                <strong style="color: red">* <?php echo e($errors->first('quantity')); ?></strong>
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         <label for="quantity" class="col-sm-2 control-label">Quantity</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" id="quantity" name="quantity"
@@ -101,11 +90,11 @@
 
 
                                     <div class="form-group">
-                                        @if ($errors->has('art_no'))
+                                        <?php if($errors->has('art_no')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
-                                                <strong style="color: red">* {{ $errors->first('art_no') }}</strong>
+                                                <strong style="color: red">* <?php echo e($errors->first('art_no')); ?></strong>
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         <label for="art_no" class="col-sm-2 control-label">SKU</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" placeholder="Enter SKU No." id="art_no" name="art_no" required>
@@ -118,11 +107,11 @@
 
 
                                     <div class="form-group">
-                                        @if ($errors->has('price'))
+                                        <?php if($errors->has('price')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
-                                                <strong style="color: red">* {{ $errors->first('price') }}</strong>
+                                                <strong style="color: red">* <?php echo e($errors->first('price')); ?></strong>
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         <label for="price" class="col-sm-2 control-label">Unit Price</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" id="price" name="price" placeholder="Unit Price" required>
@@ -136,19 +125,13 @@
 
 
                                     <div class="form-group">
-                                        @if ($errors->has('stk'))
+                                        <?php if($errors->has('stk')): ?>
                                             <span class="invalid-feedback" style="" role="alert">
                                                 <strong style="color: red">*
-                                                    {{ $errors->first('stk') }}</strong>
+                                                    <?php echo e($errors->first('stk')); ?></strong>
                                             </span>
-                                        @endif
-                                        {{-- <label for="is_in_service" class="col-sm-2 control-label">In Service</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" id="is_in_service" name="is_in_service">
-                                                <option value="1">Yes</option>
-                                                <option value="0" selected>No</option>
-                                            </select>
-                                        </div> --}}
+                                        <?php endif; ?>
+                                        
                                         <label for="stock" class="col-sm-2 control-label">Stock</label>
                                         <div class="col-sm-4">
                                             <select class="form-control" id="stk" name="stk">
@@ -172,7 +155,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- img result --}}
+                                    
 
                                 </div>
                                 <!-- /.box-body -->
@@ -191,9 +174,9 @@
         </div>
 
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         // Add the following code if you want the name of the file appear on select
         $(".custom-file-input").on("change", function () {
@@ -202,4 +185,6 @@
         });
 
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laravel\Inventory\Shop_management\resources\views/product/create.blade.php ENDPATH**/ ?>

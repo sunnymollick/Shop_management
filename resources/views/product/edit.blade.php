@@ -91,34 +91,6 @@ Dashboard
         </div>
 
 
-        <div class="form-group">
-            @if ($errors->has('supplier_id'))
-                <span class="invalid-feedback" style="" role="alert">
-                    <strong style="color: red">* {{ $errors->first('supplier_id') }}</strong>
-                </span>
-            @endif
-            <label for="quantity" class="col-sm-2 control-label">Supplier</label>
-            <div class="col-sm-10">
-
-                {{-- <input type="text" class="form-control" id="quantity" name="quantity"
-                    value="{{ $product->stock }}" required> --}}
-
-
-                    <select name="supplier_id" id="supplier_id" class="form-control">
-                        @foreach ($suppliers as $row)
-                            <option value="{{ $row->id }}"
-                                @if ($row->id == $product->supplier_id)
-                                    selected
-                                @endif
-                        >{{ $row->name }}</option>
-                        @endforeach
-
-                    </select>
-
-            </div>
-        </div>
-
-
 
         <div class="form-group">
             @if ($errors->has('origin'))

@@ -116,23 +116,6 @@
                             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         </a>
                     </li>
-                    @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 2 )
-                    <li class="treeview {{ Request::is('customers*') ? 'active' : '' }}">
-                        <a href="#">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span>Supplier</span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li class="{{ Request::is('suppliers*') ? 'active' : '' }}"><a
-                                    href="{{ route('suppliers.index') }}"><i class="fa fa-circle-o"></i> All
-                                    Supplier
-                                </a></li>
-                            <li class="{{ Request::is('suppliers/create*') ? 'active' : '' }}"><a
-                                    href="{{ route('suppliers.create') }}"><i class="fa fa-circle-o"></i> Add New
-                                    Supplier </a></li>
-                        </ul>
-                    </li>
-                    @endif
                     @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0 )
                     <li class="treeview {{ Request::is('customers*') ? 'active' : '' }}">
                         <a href="#">

@@ -33,7 +33,6 @@
                                     <th>Sr.</th>
                                     <th>Title</th>
                                     {{-- <th>Description</th> --}}
-                                    <th>Suppliers</th>
                                     <th>Category</th>
                                     <th>Origin</th>
                                     <th>Stock</th>
@@ -54,7 +53,6 @@
                                         <td>{{ $cnt++ }}</td>
                                         <td>{{ $product->title }}</td>
                                         {{-- <td>{{\Illuminate\Support\Str::limit($product->description, 100)}}</td> --}}
-                                        <td>{{ $product->supplier }}</td>
                                         <td>{{ $product->category ? $product->category->name : "No Category"}}
                                         </td>
                                         <td>{{ $product->origin }}</td>
@@ -106,7 +104,6 @@
                                     <th>Sr.</th>
                                     <th>Title</th>
                                     {{-- <th>Description</th> --}}
-                                    <th>Suppliers</th>
                                     <th>Category</th>
                                     <th>Origin</th>
                                     <th>Stock</th>

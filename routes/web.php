@@ -6,7 +6,6 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StockController;
-use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -83,9 +82,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('delete/category/{id}', 'ProductController@deleteCategory')->name('delete.category');
 
 
-    // Suppliers Routes Go here
-    Route::resource('suppliers', 'SupplierController');
-    Route::get('delete/customer/{id}','SupplierController@delete')->name('suppliers.delete');
 
 
 });
