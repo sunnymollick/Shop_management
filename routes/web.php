@@ -118,7 +118,6 @@ Route::get('/bundle/{bundle}', 'ProductController@showBundle')->name('bundle');
 Route::get('/', [CustomerController::class,'login'])->name('customers.login');
 Route::get('/customer/register', [CustomerController::class, 'register'])->name('customer.register');
 Route::post('/customer/login', [CustomerController::class, 'loginStore'])->name('customer.login.store');
-// Route::post('/customer/register/store', [CustomerController::class, 'store'])->name('customer.store ');
 
 
 

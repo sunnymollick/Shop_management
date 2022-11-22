@@ -2,6 +2,7 @@
 
 <?php $__env->startSection('content'); ?>
 
+
 <section class="content-header">
     <h1>
     Dashboard
@@ -138,7 +139,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="<?php echo e(route('customers.update',$user->id)); ?>" method="POST" enctype="multipart/form-data">
+       <?php echo csrf_field(); ?>
+       <?php echo e(method_field('PUT')); ?>
+
         <div class="form-group">
     <label for="exampleInputEmail1">Name</label>
     <input type="text" class="form-control" id="exampleInputName1" name="name" value="<?php echo e($user->name); ?>" aria-describedby="nameHelp">
@@ -150,6 +154,10 @@
         <div class="form-group">
     <label for="exampleInputEmail1">Mobile</label>
     <input type="text" class="form-control" name="mobile" value="<?php echo e($user->mobile); ?>" id="exampleInputphone1" aria-describedby="emailHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Address</label>
+    <input type="text" class="form-control" name="address" value="<?php echo e($user->address); ?>" id="exampleInputAddress" aria-describedby="addressHelp">
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Old Password</label>
