@@ -31,8 +31,8 @@
                     <div class="box-body">
                         <div class="col-md-6">
                             <form class="form-horizontal" id="formId" action="{{ route('category.store') }}"
-                                  method="POST"
-                                  enctype="multipart/form-data">
+                                method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id">
                                 <div class="box-body">

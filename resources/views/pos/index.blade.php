@@ -108,12 +108,18 @@
             </div>
         </div>
         <div class="col-md-6">
+        @if(Auth::user()->is_admin==5)
+                        @else
             <h3>Customer and selected items</h3>
+            @endif
             {{--  --}}
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" action="{{ route('pos.store') }}" enctype="multipart/form-data" method="POST">
                         @csrf
+
+                        @if(Auth::user()->is_admin==5)
+                        @else
                         <div class="box-body">
                             <div class="form-group">
                                 {{-- <label for="inputPatient" class="col-sm-2 control-label">Patient</label> --}}
@@ -198,6 +204,7 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        @endif
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>
@@ -563,11 +570,11 @@
                 var cell4 = row.insertCell(4);
                 var cell5 = row.insertCell(5);
                 var cell6 = row.insertCell(6);
- 
+
                 cell0.innerHTML = artNo;
                 cell1.innerHTML = title;
- 
- 
+
+
                 cell2.innerHTML =
                     '<input type="number" name="quantity[]" id="quantity[]" class="form-control qty" value="' +
                     prevQuantity + '" min="1" max="' +
@@ -576,15 +583,15 @@
                     '<input type="text" name="unitPrice[]" class="form-control" value="'+unitPrice+'" onchange="matchUnitAndSubTotal()"/>';
                 cell4.innerHTML =
                     '<input type="text" name="subTotal[]" id="subTotal[]" class="form-control subtotal" value=""/>';
- 
+
                 cell5.innerHTML = '<button type="button" name="remove" id="' + rowCount +
                     '" class="btn btn-danger btn_remove" onclick="removeProductOnCross(' + prodId + ')">X</button>';
- 
+
                 cell6.innerHTML = '<input type="hidden" name="productId[]" id="productId[]" class="form-control" value="' +
                     prodId + '"/>';
             }
         }
- 
+
         function removeProductOnCross(button_id) {
             var rowId = 'row' + button_id;
             var row = document.getElementById(rowId);
@@ -593,7 +600,7 @@
         }
         // Image select End
         // Update Form Fileds
- 
+
         function calculatex() {
             var table = document.getElementById("dynamic_field");
             var totQty = 0;
@@ -605,7 +612,7 @@
             }
             var totalQty = document.getElementById('totalQty');
             totalQty.value = sum;
- 
+
             const val2 = document.querySelectorAll('.form-control.subtotal');
             let sum2 = 0.0;
             for (let v of val2) {
@@ -614,33 +621,33 @@
             }
             // var returnDateElement = document.getElementById('returnDate');
             // var returnDate = returnDateElement.value;
- 
+
             // Start date new added
             var startDateElement = document.getElementById('startDate');
             var startDate = startDateElement.value;
- 
+
             // const date1 = new Date(returnDate);
             // const date2 = new Date(startDate);
             // const diffTime = Math.abs(date2 - date1) + 1;
             // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
- 
+
             // Showing time difference from start date to end date
             // document.getElementById("rentTime").innerHTML = diffDays + " days for rent";
- 
+
             var totalAmount = document.getElementById('totalAmount');
             totalAmount.value = sum2;
- 
+
             // diffDays
             //     ?
             //     totalAmount.value = sum2 * diffDays :
             //     totalAmount.value = sum2;
- 
+
             var netPay =  document.getElementById('netpay');
             netPay.value = sum2;
- 
- 
+
+
         }
- 
+
         function matchUnitAndSubTotal() {
             var table = document.getElementById('dynamic_field');
             for (var i = 1, row; row = table.rows[i]; i++) {
@@ -648,7 +655,7 @@
                     .querySelector("input").value;
             }
         }
- 
+
         function checkButton() {
             var button = document.getElementById('makeOrder');
             if (document.getElementById('dynamic_field').getElementsByTagName('tr').length > 1) {
@@ -657,9 +664,9 @@
                 button.style.display = 'none';
             }
         }
- 
- 
- 
+
+
+
         $(function() {
             $('.datetimepicker1').daterangepicker({
                 autoUpdateInput: false,
@@ -675,13 +682,12 @@
             $('.datetimepicker1').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
- 
+
             $(document).ready(function() {
                 setInterval("checkButton()", 500);
             });
         });
- 
+
     </script>
- 
+
 @endpush
- 

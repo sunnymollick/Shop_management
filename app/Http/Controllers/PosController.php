@@ -13,6 +13,10 @@ use App\Product;
 use App\Receipt;
 use App\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use League\CommonMark\Extension\Table\Table;
+use Illuminate\Support\Facades\DB;
 
 class PosController extends Controller
 {
@@ -57,6 +61,7 @@ class PosController extends Controller
         $show_receipt = false;
 
         // Create new customer
+       
         if (isset($request->customerName)) {
             $customer = new Customer();
             $customer->name = $request->customerName;
@@ -87,10 +92,13 @@ class PosController extends Controller
             $customer->save();
             $customerId   = $customer->id;
             $customerName = $request->customerName;
-        } else {
+        }else if(isset($request->customerId)){
             $customerInfo = explode(",", $request->customerId);
             $customerId = $customerInfo[0];
             $customerName = $customerInfo[1];
+        }else{
+            $customerId = Auth::user()->id;
+            $customerName = Auth::user()->name;
         }
         $discount = 0;
         if (isset($request->discount)) {
@@ -121,6 +129,9 @@ class PosController extends Controller
         $order->amount_paid     = $paid_amount;
         $order->advance_paid     = $paid_amount;
         $order->total_quantity  = 0;
+        $order->status_code = mt_rand(100000,999999);
+
+
 
         if (($paid_amount + $discount) == $request->totalAmount) {
             $order->is_paid = true;
@@ -129,6 +140,16 @@ class PosController extends Controller
         }
         $order->save();
         $orderId = $order->id;
+
+        $details = [
+            'title' => 'Mail for order confirmation',
+            'body' => 'your order tracking code is '.$order->status_code,
+        ];
+
+
+        $customer  = DB::Table('customers')->where('id',$customerId)->first();
+
+        Mail::to($customer->email)->send(new \App\Mail\SendOrderTrackingCode($details));
 
 
         $total_quantity = 0;
@@ -157,6 +178,7 @@ class PosController extends Controller
             $order = Order::findOrFail($orderId);
             $order->total_quantity = $total_quantity;
             $order->save();
+            
         }
 
         // create invoice
@@ -172,7 +194,6 @@ class PosController extends Controller
         // dd($a, $a->format('Y-m-d'));
         // $invoice->due_date = $returnDate;
         $invoice->save();
-
         // Create receipt
         if ($paid_amount > 0) {
             $receipt = new Receipt();
@@ -209,6 +230,7 @@ class PosController extends Controller
             // $account->description   = $customer_name;
             $account->save();
         }
+        
 
         // return back();
         return redirect()->route('orders.show', $orderId);

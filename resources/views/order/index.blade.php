@@ -32,16 +32,12 @@
                                 <tr>
                                     <th>ID #</th>
                                     <th>Customer</th>
-                                    <th>Total Devices</th>
-                                    <th>Order Value</th>
-                                    <th>Discount</th>
-                                    <th>Paid Amount.</th>
-                                    <th>Payment Status</th>
-                                    <th>Due</th>
-                                    {{-- <th>Created At</th> --}}
-                                    <th>Order Date</th>
-                                    {{-- <th>Return Date</th>
-                                    <th>Return</th> --}}
+                                    <th>Payment Type</th>
+                                    <th>Transaction ID</th>
+                                    <th>Total</th>
+                                    {{-- <th>Payment Status</th> --}}
+                                    <th>Order Status</th>
+                                    <th>Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -49,24 +45,25 @@
                                 <?php $cnt = 1; ?>
                                 @foreach ($orders as $order)
                                     <tr>
-                                        <td>{{ $order->id }}</td>
+                                        <td>{{ $cnt++ }}</td>
                                         <td>{{ $order->cname }} - {{ $order->mobile }}</td>
-                                        <td>{{ $order->total_quantity }}</td>
-                                        <td>{{ $order->order_value }}</td>
-                                        <td>{{ $order->discount_amount }}</td>
-                                        <td>{{ $order->amount_paid }}</td>
+                                        <td>Bkash</td>
+                                        <td>Ac-02415654845</td>
+                                        <td>{{ $order->order_value }} TK.</td>
                                         <td>
-                                            @if ( ( $order->order_value - ($order->amount_paid + $order->discount_amount)) == 0)
-                                                <span class="label label-success">Paid</span>
+                                            @if ($order->order_status == 0)
+                                                <span class="label label-warning">Pending</span>
+                                            @elseif ($order->order_status == 1)
+                                                <span class="label label-info">Payment Accept</span>
+                                            @elseif ($order->order_status == 2)
+                                                <span class="label label-warning">Progress</span>
+                                            @elseif ($order->order_status == 3)
+                                                <span class="label label-success">Delivered</span>
                                             @else
-                                                <span class="label label-danger">Due</span>
+                                                <span class="label label-danger">Cancel</span>
                                             @endif
                                         </td>
-                                        <td>{{
 
-                                                $order->order_value - ($order->amount_paid + $order->discount_amount)
-
-                                        }}</td>
                                         <td>{{ date_format(date_create($order->created_at), 'm/d/Y h:i A') }}</td>
                                         {{-- <td>{{ date_format(date_create($order->start_date), 'm/d/Y') }}</td>
                                         @if ($order->return_date)
@@ -93,10 +90,12 @@
                                                 {{-- <a href="{{route('products.edit', $order->id)}}">
                                                     <small class="label bg-yellow" style="margin-right: 15px">Edit</small>
                                                 </a> --}}
+                                                @if ($order->order_status == 0)
                                                 <a onclick="return confirm('Are you sure?')"
-                                                    href="{{ route('orders.delete', $order->id) }}">
+                                                    href="{{ route('cancel.order', $order->id) }}">
                                                     <small class="label bg-red" style="margin-right: 15px">Cancel</small>
                                                 </a>
+                                                @endif
 
                                             </span>
                                         </td>
