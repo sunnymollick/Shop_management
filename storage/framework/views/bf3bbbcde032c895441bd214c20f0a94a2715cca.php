@@ -37,6 +37,12 @@
                             id="productBtn">Products</button>
                         <button class="btn-secondary btn" onclick="selectBundleShow()"
                             id="boundleBtn">Bundles</button>
+                        <select style="width: 67%; float: right;;" class="form-control" id="category">
+                            <option value="">Choose Category</option>
+                        <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
                         <h3 id="categoryTitle">Products</h3>
                     </div>
                     <div class="" style="margin-left: 10px;">
@@ -112,12 +118,18 @@
             </div>
         </div>
         <div class="col-md-6">
+        <?php if(Auth::user()->is_admin==5): ?>
+                        <?php else: ?>
             <h3>Customer and selected items</h3>
+            <?php endif; ?>
             
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" action="<?php echo e(route('pos.store')); ?>" enctype="multipart/form-data" method="POST">
                         <?php echo csrf_field(); ?>
+
+                        <?php if(Auth::user()->is_admin==5): ?>
+                        <?php else: ?>
                         <div class="box-body">
                             <div class="form-group">
                                 
@@ -203,6 +215,7 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        <?php endif; ?>
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>
@@ -415,8 +428,45 @@
     </script>
     
  
- 
- 
+    <script>
+        $(document).ready(function(){
+            $("#category").change(function(e){
+                e.preventDefault();
+                var status_code = $("#category").val();
+                $.ajax({
+                    url : 'api/get/category/products/'+status_code,
+                    dataType : 'json',
+                    type: 'get',
+                    success:function(data){
+
+                        console.log(data);
+                        
+                        }
+                    });
+                });
+            });
+    </script>
+
+ <!-- <script>
+    $(document).ready(function(){
+        $("#category").change(function(){
+        var id=$(this).val();
+        console.log(id);
+        // var dataString = 'id='+ id;
+        // console.log(dataString);
+        $.ajax({
+            type: 'get',
+            url: 'api/get/category/products/'+id,
+            dataType : 'json',
+            success: function(data){
+                console.log(data); // I get error and success function does not execute
+                }
+            });
+
+        });
+
+    });
+</script> -->
  
     <script type="text/javascript">
         $(function() {
@@ -554,11 +604,11 @@
                 var cell4 = row.insertCell(4);
                 var cell5 = row.insertCell(5);
                 var cell6 = row.insertCell(6);
- 
+
                 cell0.innerHTML = artNo;
                 cell1.innerHTML = title;
- 
- 
+
+
                 cell2.innerHTML =
                     '<input type="number" name="quantity[]" id="quantity[]" class="form-control qty" value="' +
                     prevQuantity + '" min="1" max="' +
@@ -567,15 +617,15 @@
                     '<input type="text" name="unitPrice[]" class="form-control" value="'+unitPrice+'" onchange="matchUnitAndSubTotal()"/>';
                 cell4.innerHTML =
                     '<input type="text" name="subTotal[]" id="subTotal[]" class="form-control subtotal" value=""/>';
- 
+
                 cell5.innerHTML = '<button type="button" name="remove" id="' + rowCount +
                     '" class="btn btn-danger btn_remove" onclick="removeProductOnCross(' + prodId + ')">X</button>';
- 
+
                 cell6.innerHTML = '<input type="hidden" name="productId[]" id="productId[]" class="form-control" value="' +
                     prodId + '"/>';
             }
         }
- 
+
         function removeProductOnCross(button_id) {
             var rowId = 'row' + button_id;
             var row = document.getElementById(rowId);
@@ -584,7 +634,7 @@
         }
         // Image select End
         // Update Form Fileds
- 
+
         function calculatex() {
             var table = document.getElementById("dynamic_field");
             var totQty = 0;
@@ -596,7 +646,7 @@
             }
             var totalQty = document.getElementById('totalQty');
             totalQty.value = sum;
- 
+
             const val2 = document.querySelectorAll('.form-control.subtotal');
             let sum2 = 0.0;
             for (let v of val2) {
@@ -605,33 +655,33 @@
             }
             // var returnDateElement = document.getElementById('returnDate');
             // var returnDate = returnDateElement.value;
- 
+
             // Start date new added
             var startDateElement = document.getElementById('startDate');
             var startDate = startDateElement.value;
- 
+
             // const date1 = new Date(returnDate);
             // const date2 = new Date(startDate);
             // const diffTime = Math.abs(date2 - date1) + 1;
             // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
- 
+
             // Showing time difference from start date to end date
             // document.getElementById("rentTime").innerHTML = diffDays + " days for rent";
- 
+
             var totalAmount = document.getElementById('totalAmount');
             totalAmount.value = sum2;
- 
+
             // diffDays
             //     ?
             //     totalAmount.value = sum2 * diffDays :
             //     totalAmount.value = sum2;
- 
+
             var netPay =  document.getElementById('netpay');
             netPay.value = sum2;
- 
- 
+
+
         }
- 
+
         function matchUnitAndSubTotal() {
             var table = document.getElementById('dynamic_field');
             for (var i = 1, row; row = table.rows[i]; i++) {
@@ -639,7 +689,7 @@
                     .querySelector("input").value;
             }
         }
- 
+
         function checkButton() {
             var button = document.getElementById('makeOrder');
             if (document.getElementById('dynamic_field').getElementsByTagName('tr').length > 1) {
@@ -648,9 +698,9 @@
                 button.style.display = 'none';
             }
         }
- 
- 
- 
+
+
+
         $(function() {
             $('.datetimepicker1').daterangepicker({
                 autoUpdateInput: false,
@@ -666,14 +716,14 @@
             $('.datetimepicker1').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
- 
+
             $(document).ready(function() {
                 setInterval("checkButton()", 500);
             });
         });
- 
+
     </script>
- 
+
 <?php $__env->stopPush(); ?>
- 
+
 <?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laravel\Inventory\Shop_management\resources\views/pos/index.blade.php ENDPATH**/ ?>

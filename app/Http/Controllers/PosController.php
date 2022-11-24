@@ -32,8 +32,9 @@ class PosController extends Controller
             ->latest()->get();
         $customers = Customer::where('is_deleted', 0)->get();
         $bundles = Bundle::where('is_deleted', 0)->get();
+        $categories = Category::all();
         // $categories = Category::all();
-        return view('pos.index', ['products' => $products, 'customers' => $customers, 'bundles' => $bundles]);
+        return view('pos.index', ['products' => $products, 'customers' => $customers, 'bundles' => $bundles, 'categories' => $categories]);
     }
 
     /**
@@ -61,7 +62,7 @@ class PosController extends Controller
         $show_receipt = false;
 
         // Create new customer
-       
+
         if (isset($request->customerName)) {
             $customer = new Customer();
             $customer->name = $request->customerName;
@@ -92,11 +93,11 @@ class PosController extends Controller
             $customer->save();
             $customerId   = $customer->id;
             $customerName = $request->customerName;
-        }else if(isset($request->customerId)){
+        } else if (isset($request->customerId)) {
             $customerInfo = explode(",", $request->customerId);
             $customerId = $customerInfo[0];
             $customerName = $customerInfo[1];
-        }else{
+        } else {
             $customerId = Auth::user()->id;
             $customerName = Auth::user()->name;
         }
@@ -129,7 +130,7 @@ class PosController extends Controller
         $order->amount_paid     = $paid_amount;
         $order->advance_paid     = $paid_amount;
         $order->total_quantity  = 0;
-        $order->status_code = mt_rand(100000,999999);
+        $order->status_code = mt_rand(100000, 999999);
 
 
 
@@ -143,11 +144,11 @@ class PosController extends Controller
 
         $details = [
             'title' => 'Mail for order confirmation',
-            'body' => 'your order tracking code is '.$order->status_code,
+            'body' => 'your order tracking code is ' . $order->status_code,
         ];
 
 
-        $customer  = DB::Table('customers')->where('id',$customerId)->first();
+        $customer  = DB::Table('customers')->where('id', $customerId)->first();
 
         Mail::to($customer->email)->send(new \App\Mail\SendOrderTrackingCode($details));
 
@@ -178,7 +179,6 @@ class PosController extends Controller
             $order = Order::findOrFail($orderId);
             $order->total_quantity = $total_quantity;
             $order->save();
-            
         }
 
         // create invoice
@@ -230,7 +230,7 @@ class PosController extends Controller
             // $account->description   = $customer_name;
             $account->save();
         }
-        
+
 
         // return back();
         return redirect()->route('orders.show', $orderId);
@@ -287,5 +287,14 @@ class PosController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getCategorizedProducts($id)
+    {
+        $categorizedProducts = Product::where('category_id', $id)->first();
+        return response()->json([
+            'success' => 'success',
+            'categorizedProducts' => $categorizedProducts,
+        ]);
     }
 }

@@ -36,6 +36,12 @@
                             id="productBtn">Products</button>
                         <button class="btn-secondary btn" onclick="selectBundleShow()"
                             id="boundleBtn">Bundles</button>
+                        <select style="width: 67%; float: right;;" class="form-control" id="category">
+                            <option value="">Choose Category</option>
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                        </select>
                         <h3 id="categoryTitle">Products</h3>
                     </div>
                     <div class="" style="margin-left: 10px;">
@@ -431,8 +437,44 @@
         });
     </script> --}}
  
- 
- 
+    <script>
+        $(document).ready(function(){
+            $("#category").change(function(){
+                var status_code = $("#category").val();
+                $.ajax({
+                    url : 'api/get/category/products/'+status_code,
+                    dataType : 'json',
+                    type: 'get',
+                    success:function(data){
+
+                        console.log(data);
+                        
+                        }
+                    });
+                });
+            });
+    </script>
+
+ <!-- <script>
+    $(document).ready(function(){
+        $("#category").change(function(){
+        var id=$(this).val();
+        console.log(id);
+        // var dataString = 'id='+ id;
+        // console.log(dataString);
+        $.ajax({
+            type: 'get',
+            url: 'api/get/category/products/'+id,
+            dataType : 'json',
+            success: function(data){
+                console.log(data); // I get error and success function does not execute
+                }
+            });
+
+        });
+
+    });
+</script> -->
  
     <script type="text/javascript">
         $(function() {

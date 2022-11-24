@@ -40,7 +40,67 @@
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-</head>
+
+        <link rel="stylesheet" type="text/css" 
+     href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	
+<style>
+    body{
+    margin-top:20px;
+    color: #1a202c;
+    text-align: left;
+    background-color: #e2e8f0;    
+}
+.main-body {
+    padding: 15px;
+}
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1rem;
+}
+
+.gutters-sm {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.gutters-sm>.col, .gutters-sm>[class*=col-] {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+.mb-3, .my-3 {
+    margin-bottom: 1rem!important;
+}
+
+.bg-gray-300 {
+    background-color: #e2e8f0;
+}
+.h-100 {
+    height: 100%!important;
+}
+.shadow-none {
+    box-shadow: none!important;
+}
+</style>
+
+    </head>
 
 <body class="hold-transition skin-blue sidebar-mini <?php echo e(Request::is('pos*') ? 'sidebar-collapse ' : ''); ?>">
     <div class="wrapper">
@@ -74,8 +134,8 @@
                                         Admin
                                         <?php elseif((Auth::user()->is_admin) == 0): ?>
                                             Seller
-                                        <?php elseif((Auth::user()->is_admin) == 2): ?>
-                                            Purchaser
+                                        <?php elseif((Auth::user()->is_admin) == 5): ?>
+                                            Customer
                                         <?php endif; ?> )
                                     </p>
 
@@ -172,10 +232,10 @@
                     <?php endif; ?>
 
 
-                    <?php if((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0 ): ?>
+                    <?php if((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0|| (Auth::user()->is_admin) == 5 ): ?>
                     <li class="<?php echo e(Request::is('pos*') ? 'active' : ''); ?>">
                         <a href="<?php echo e(route('pos.index')); ?>">
-                            <i class="fa fa-line-chart"></i> <span>Point Of Sale</span>
+                            <i class="fa fa-line-chart"></i> <span><?php if((Auth::user()->is_admin) == 5): ?> Place Order <?php else: ?> Point Of Sale <?php endif; ?></span>
                         </a>
                     </li>
                     <?php endif; ?>
@@ -212,13 +272,17 @@
                         </a>
                         <ul class="treeview-menu">
                             <li class="<?php echo e(Request::is('orders*') ? 'active' : ''); ?>"><a
-                                    href="<?php echo e(route('orders.index')); ?>"><i class="fa fa-circle-o"></i> All Orders </a>
+                                    href="<?php echo e(route('orders.index')); ?>"><i class="fa fa-circle-o"></i> New Orders </a>
                             </li>
                             <li class="<?php echo e(Request::is('orders*') ? 'active' : ''); ?>"><a
-                                href="<?php echo e(route('orders.paid_orders')); ?>"><i class="fa fa-circle-o"></i> Paid Orders </a>
+                                    href="<?php echo e(route('orders.accept.payment')); ?>"><i class="fa fa-circle-o"></i> Accept Payments </a>
+                            </li>
+
+                            <li class="<?php echo e(Request::is('orders*') ? 'active' : ''); ?>"><a
+                                href="<?php echo e(route('all.process.delivery')); ?>"><i class="fa fa-circle-o"></i> Process Delivery </a>
                             </li>
                             <li class="<?php echo e(Request::is('orders*') ? 'active' : ''); ?>"><a
-                                href="<?php echo e(route('orders.due_orders')); ?>"><i class="fa fa-circle-o"></i> Due Orders </a>
+                                href="<?php echo e(route('all.delivery')); ?>"><i class="fa fa-circle-o"></i> Delivery Success</a>
                             </li>
                             <li class="<?php echo e(Request::is('orders*') ? 'active' : ''); ?>"><a
                                 href="<?php echo e(route('orders.all_cancel_orders')); ?>"><i class="fa fa-circle-o"></i> Cancel Orders </a>
@@ -308,6 +372,45 @@
 
     <?php echo $__env->yieldPushContent('js'); ?>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script>
+  <?php if(Session::has('message')): ?>
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.success("<?php echo e(session('message')); ?>");
+  <?php endif; ?>
+
+  <?php if(Session::has('error')): ?>
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.error("<?php echo e(session('error')); ?>");
+  <?php endif; ?>
+
+  <?php if(Session::has('info')): ?>
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.info("<?php echo e(session('info')); ?>");
+  <?php endif; ?>
+
+  <?php if(Session::has('warning')): ?>
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.warning("<?php echo e(session('warning')); ?>");
+  <?php endif; ?>
+</script>
 </body>
 
 </html>
