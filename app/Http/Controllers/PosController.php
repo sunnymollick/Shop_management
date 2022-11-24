@@ -89,6 +89,7 @@ class PosController extends Controller
             $customerId = $customerInfo[0];
             $customerName = $customerInfo[1];
         }
+        
         $discount = 0;
         if (isset($request->discount)) {
             $discount = $request->discount;
