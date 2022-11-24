@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Ui\Presets\React;
+use Symfony\Component\Console\Input\Input;
 
 class CustomerController extends Controller
 {
@@ -136,7 +137,7 @@ class CustomerController extends Controller
             # code...
             Session::put('role', 'customer');
             Session::put('userId', $user->id);
-            return redirect('/login');
+            return redirect('/',['user'=>$user]);
         }
     }
 
@@ -172,6 +173,20 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $customer = Customer::findOrFail($id);
+
+        $inputPassword = $request->oldPassword;
+
+        if(isset($request->password)){
+            if($request->password != $request->password_confirmation){
+                return back()->with("error","Confirmation message dosen't match!");
+            }
+           else if(Hash::check($inputPassword,$customer->password)){
+                $customer->password = Hash::make($request->password);
+            }
+            else{
+               return back()->with("error", "Old Password Doesn't match!");
+            }
+        }
 
         if ($request->hasFile('image')) {
             $image           = $request->file('image');

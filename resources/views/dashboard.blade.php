@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <section class="content-header">
     <h1>
     Dashboard
@@ -30,7 +31,7 @@
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>John Doe</h4>
+                      <h4> {{ Auth::user()->name }}</h4>
                       <p class="text-secondary mb-1">Full Stack Developer</p>
                       <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                       <button class="btn btn-primary">Follow</button>
@@ -118,11 +119,71 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-12">
-                      <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                      <button type="button" class="btn btn-info " data-toggle="modal" data-target="#exampleModalCenter">Edit</button>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Update information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{route('customers.update',$user->id)}}" method="POST" enctype="multipart/form-data">
+       @csrf
+       {{ method_field('PUT') }}
+        <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text" class="form-control" id="exampleInputName1" name="name" value="{{$user->name}}" aria-describedby="nameHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="{{$user->email}}" aria-describedby="emailHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Mobile</label>
+    <input type="text" class="form-control" name="mobile" value="{{$user->mobile}}" id="exampleInputphone1" aria-describedby="emailHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Address</label>
+    <input type="text" class="form-control" name="address" value="{{$user->address}}" id="exampleInputAddress" aria-describedby="addressHelp">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Old Password</label>
+    <input type="password" class="form-control" name="oldPassword" id="exampleInputPassword1">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">New Password</label>
+    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Confirm Password</label>
+    <input type="password" class="form-control" name="password_confirmation" id="exampleInputConfirmPassword1">
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
 
               <div class="row gutters-sm">
                 <div class="col-sm-6 mb-3">
@@ -188,7 +249,7 @@
     @else
     <div class="row">
 
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
         <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
@@ -204,7 +265,7 @@
         </div>
 
         <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
         <!-- small box -->
             <div class="small-box bg-green">
                 <div class="inner">
@@ -221,7 +282,7 @@
         <!-- ./col -->
 
         <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
         <!-- small box -->
             <div class="small-box bg-yellow">
                 <div class="inner">
@@ -237,7 +298,7 @@
         </div>
         <!-- ./col -->
         <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
             <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
@@ -251,7 +312,7 @@
                     <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-2 col-xs-6">
+            <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-teal">
                     <div class="inner">
@@ -265,7 +326,35 @@
                     <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-2 col-xs-6">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                    <div class="small-box bg-orange">
+                        <div class="inner">
+                        <h4>Total {{$total_orders}}</h4>
+
+                        <p>Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                        </div>
+                        <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                    <div class="small-box bg-orange">
+                        <div class="inner">
+                        <h4>Total {{$total_orders}}</h4>
+
+                        <p>Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                        </div>
+                        <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                     <div class="small-box bg-orange">
                         <div class="inner">
@@ -284,12 +373,11 @@
 
                 @if(Auth::user()->is_admin==5)
 @else -->
- <div class="col-md-6">
+ <!-- <div class="col-md-6">
     <div class="box">
         <div class="box-header">
             <h3 class="box-title text-danger">Products Alert</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <table id="example1" class="table table-bordered table-striped table-responsive">
                 <thead>
@@ -366,7 +454,6 @@
                 </tfoot>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
 </div>
 <div class="col-md-6">
@@ -374,7 +461,6 @@
         <div class="box-header">
             <h3 class="box-title text-success">Recent Sale</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <table id="example2" class="table table-bordered table-striped table-responsive">
                 <thead>
@@ -460,9 +546,8 @@
                 </tfoot>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
-</div>
+</div> -->
 @endif
     </div>
 

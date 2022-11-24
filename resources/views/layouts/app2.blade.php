@@ -41,7 +41,9 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
-
+        <link rel="stylesheet" type="text/css" 
+     href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	
 <style>
     body{
     margin-top:20px;
@@ -248,7 +250,7 @@
                     @if ((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0|| (Auth::user()->is_admin) == 5 )
                     <li class="{{ Request::is('pos*') ? 'active' : '' }}">
                         <a href="{{ route('pos.index') }}">
-                            <i class="fa fa-line-chart"></i> <span>Point Of Sale</span>
+                            <i class="fa fa-line-chart"></i> <span>@if((Auth::user()->is_admin) == 5) Place Order @else Point Of Sale @endif</span>
                         </a>
                     </li>
                     @endif
@@ -409,6 +411,45 @@
 
     @stack('js')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script>
+  @if(Session::has('message'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.success("{{ session('message') }}");
+  @endif
+
+  @if(Session::has('error'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.error("{{ session('error') }}");
+  @endif
+
+  @if(Session::has('info'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.info("{{ session('info') }}");
+  @endif
+
+  @if(Session::has('warning'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.warning("{{ session('warning') }}");
+  @endif
+</script>
 </body>
 
 </html>

@@ -108,12 +108,18 @@
             </div>
         </div>
         <div class="col-md-6">
+        @if(Auth::user()->is_admin==5)
+                        @else
             <h3>Customer and selected items</h3>
+            @endif
             {{--  --}}
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" action="{{ route('pos.store') }}" enctype="multipart/form-data" method="POST">
                         @csrf
+
+                        @if(Auth::user()->is_admin==5)
+                        @else
                         <div class="box-body">
                             <div class="form-group">
                                 {{-- <label for="inputPatient" class="col-sm-2 control-label">Patient</label> --}}
@@ -198,6 +204,7 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        @endif
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>

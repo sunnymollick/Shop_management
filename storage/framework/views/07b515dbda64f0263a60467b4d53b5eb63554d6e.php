@@ -112,12 +112,18 @@
             </div>
         </div>
         <div class="col-md-6">
+        <?php if(Auth::user()->is_admin==5): ?>
+                        <?php else: ?>
             <h3>Customer and selected items</h3>
+            <?php endif; ?>
             
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" action="<?php echo e(route('pos.store')); ?>" enctype="multipart/form-data" method="POST">
                         <?php echo csrf_field(); ?>
+
+                        <?php if(Auth::user()->is_admin==5): ?>
+                        <?php else: ?>
                         <div class="box-body">
                             <div class="form-group">
                                 
@@ -203,6 +209,7 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        <?php endif; ?>
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>

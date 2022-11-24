@@ -1,6 +1,6 @@
-@extends('layouts.app2')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <section class="content-header">
         <h1>
             Dashboard
@@ -14,9 +14,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <h2 class="page-header">
-                    {{-- <i class="fa fa-globe"></i> {{ $settings->company_name }} --}}
-                    <img src="{{ asset($settings->image_path) }}" height="100" width="250" alt="Logo">
-                    <small class="pull-right">Date: {{ date('d/m/Y') }}</small>
+                    
+                    <img src="<?php echo e(asset($settings->image_path)); ?>" height="100" width="250" alt="Logo">
+                    <small class="pull-right">Date: <?php echo e(date('d/m/Y')); ?></small>
                 </h2>
             </div>
             <!-- /.col -->
@@ -26,31 +26,32 @@
             <div class="col-sm-4 invoice-col">
                 From
                 <address>
-                    <strong>{{ $settings->company_name }}</strong><br>
-                    {{ $settings->company_address }}<br>
-                    {{ $settings->company_city }}<br>
-                    Phone: {{ $settings->phone }}<br>
-                    Email: {{ $settings->email }}
+                    <strong><?php echo e($settings->company_name); ?></strong><br>
+                    <?php echo e($settings->company_address); ?><br>
+                    <?php echo e($settings->company_city); ?><br>
+                    Phone: <?php echo e($settings->phone); ?><br>
+                    Email: <?php echo e($settings->email); ?>
+
                 </address>
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col">
                 To
                 <address>
-                    <strong>{{ $order->cname }}</strong><br>
-                    Office Address: {{ $order->address }}<br>
-                    Deliver Address: {{ $order->delivery_address }}<br>
-                    Phone: {{ $order->mobile }}<br>
+                    <strong><?php echo e($order->cname); ?></strong><br>
+                    Office Address: <?php echo e($order->address); ?><br>
+                    Deliver Address: <?php echo e($order->delivery_address); ?><br>
+                    Phone: <?php echo e($order->mobile); ?><br>
 
                 </address>
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col">
-                <b>Invoice {{ $invoice->invoice_id }}</b><br>
+                <b>Invoice <?php echo e($invoice->invoice_id); ?></b><br>
                 <br>
-                <b>Order ID:</b> {{ $order->id }}<br>
-                <b>Order Date:</b> {{ date_format(date_create($order->return_date), 'd/m/Y') }}<br>
-                {{-- <b>Account:</b> 968-34567 --}}
+                <b>Order ID:</b> <?php echo e($order->id); ?><br>
+                <b>Order Date:</b> <?php echo e(date_format(date_create($order->return_date), 'd/m/Y')); ?><br>
+                
             </div>
             <!-- /.col -->
         </div>
@@ -77,17 +78,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php($i = 1)
-                        @foreach ($products as $product)
+                        <?php ($i = 1); ?>
+                        <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td>{{ $i++ }}</td>
-                                <td>{{ $product->art_no }}</td>
-                                <td>{{ $product->title }}</td>
-                                <td>{{ $product->quantity }}</td>
-                                <td>{{ $product->unit_price }}</td>
-                                <td>৳ {{ $product->price }}</td>
+                                <td><?php echo e($i++); ?></td>
+                                <td><?php echo e($product->art_no); ?></td>
+                                <td><?php echo e($product->title); ?></td>
+                                <td><?php echo e($product->quantity); ?></td>
+                                <td><?php echo e($product->unit_price); ?></td>
+                                <td>৳ <?php echo e($product->price); ?></td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
@@ -102,58 +103,39 @@
             <!-- /.col -->
             <div class="col-xs-6">
                 <p class="lead"> Order Status  :
-                    @if ($order->order_status == 0)
+                    <?php if($order->order_status == 0): ?>
                         <span style="padding-left: 110px"><span class="label label-warning" style="font-size: 20px">Pending</span></span>
-                    @elseif ($order->order_status == 1)
+                    <?php elseif($order->order_status == 1): ?>
                         <span style="padding-left: 110px"><span class="label label-info" style="font-size: 20px">Payment Accepted</span></span>
-                    @elseif ($order->order_status == 2)
+                    <?php elseif($order->order_status == 2): ?>
                         <span style="padding-left: 110px"><span class="label label-warning" style="font-size: 20px">Progress</span></span>
-                    @elseif ($order->order_status == 3)
+                    <?php elseif($order->order_status == 3): ?>
                         <span style="padding-left: 110px"><span class="label label-success" style="font-size: 20px">Delivered </span></span>
-                    @else
+                    <?php else: ?>
                         <span style="padding-left: 110px"><span class="label label-danger" style="font-size: 20px">Order Cancelled</span></span>
-                    @endif
+                    <?php endif; ?>
                 </p>
 
                 <div class="table-responsive">
                     <table class="table">
                         <tr>
                             <th style="width:50%">Order Date:</th>
-                            <td>{{ date_format(date_create($order->created_at), 'd/m/Y') }}</td>
+                            <td><?php echo e(date_format(date_create($order->created_at), 'd/m/Y')); ?></td>
                         </tr>
-                        {{-- <tr>
-                            <th style="width:50%">Rent From:</th>
-                            <td>{{ date_format(date_create($order->start_date), 'd/m/Y') }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width:50%">Rent To:</th>
-                            <td>{{ date_format(date_create($order->return_date), 'd/m/Y') }}</td>
-                        </tr>
-
-                        <tr>
-                            <th style="width:50%">Total Days:</th>
-                            <td>{{ $d }}</td>
-                        </tr> --}}
+                        
                         <tr>
                             <th style="width:50%">Total:</th>
-                            <td>৳ {{ $order->order_value }}</td>
+                            <td>৳ <?php echo e($order->order_value); ?></td>
                         </tr>
                         <tr>
                             <th style="width:50%">Discount:</th>
-                            <td>৳ {{ $order->discount_amount }}</td>
+                            <td>৳ <?php echo e($order->discount_amount); ?></td>
                         </tr>
                         <tr>
                             <th>Net Total:</th>
-                            <td>৳ {{ $order->order_value - $order->discount_amount }}</td>
+                            <td>৳ <?php echo e($order->order_value - $order->discount_amount); ?></td>
                         </tr>
-                        {{-- <tr>
-                            <th>Amount Paid:</th>
-                            <td>৳ {{ $order->amount_paid }}</td>
-                        </tr>
-                        <tr>
-                            <th>Due:</th>
-                            <td>৳ {{ $order->order_value - $order->discount_amount - $order->amount_paid }}</td>
-                        </tr> --}}
+                        
                     </table>
                 </div>
             </div>
@@ -164,41 +146,39 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-xs-12">
-                @if ($order->order_status == 0 || $order->order_status == 1 || $order->order_status == 2 || $order->order_status == 3)
-                    <a href="{{ route('invoice.print', $order->id) }}" target="_blank" class="btn btn-primary"
+                <?php if($order->order_status == 0 || $order->order_status == 1 || $order->order_status == 2 || $order->order_status == 3): ?>
+                    <a href="<?php echo e(route('invoice.print', $order->id)); ?>" target="_blank" class="btn btn-primary"
                         style="margin-right: 5px;"><i class="fa fa-eye"></i> View Invoice</a>
-                    <a href="{{ route('invoice.print', $order->id) }}" target="_blank" class="btn btn-warning"
+                    <a href="<?php echo e(route('invoice.print', $order->id)); ?>" target="_blank" class="btn btn-warning"
                         style="margin-right: 5px;">
                         <i class="fa fa-print"></i>
                         Print Invoice
                     </a>
-                @endif
+                <?php endif; ?>
 
-                    {{-- @if (($order->order_value - $order->discount_amount - $order->amount_paid) != 0)
-                    <button class="btn btn-success" style="margin-right: 5px;" data-toggle="modal" data-target="#staticBackdrop"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Pay Due</button></span>
-                    @endif --}}
+                    
 
-                @if ($order->order_status == 0)
-                    @if(Auth::user()->is_admin==5)
-                    @else
-                    <a href="{{ route('process.accept.payment',$order->id) }}" class="btn btn-info pull-right" style="margin-right: 5px;"><i class="fa fa-money"></i> Payment Accept</a>
-                    @endif
-                    <a href="{{ route('cancel.order',$order->id) }}" class="btn btn-danger pull-right" style="margin-right: 5px;">Cancel Order</a>
-                @elseif ($order->order_status == 1)
-                    <a href="{{ route('process.delivery',$order->id) }}" class="btn btn-info pull-right">Process Delivery</a>
-                @elseif ($order->order_status == 2)
-                    <a href="{{ route('delivery.done',$order->id) }}" class="btn btn-success pull-right">Delivery Done</a>
-                @elseif ($order->order_status == 4)
+                <?php if($order->order_status == 0): ?>
+                    <?php if(Auth::user()->is_admin==5): ?>
+                    <?php else: ?>
+                    <a href="<?php echo e(route('process.accept.payment',$order->id)); ?>" class="btn btn-info pull-right" style="margin-right: 5px;"><i class="fa fa-money"></i> Payment Accept</a>
+                    <?php endif; ?>
+                    <a href="<?php echo e(route('cancel.order',$order->id)); ?>" class="btn btn-danger pull-right" style="margin-right: 5px;">Cancel Order</a>
+                <?php elseif($order->order_status == 1): ?>
+                    <a href="<?php echo e(route('process.delivery',$order->id)); ?>" class="btn btn-info pull-right">Process Delivery</a>
+                <?php elseif($order->order_status == 2): ?>
+                    <a href="<?php echo e(route('delivery.done',$order->id)); ?>" class="btn btn-success pull-right">Delivery Done</a>
+                <?php elseif($order->order_status == 4): ?>
                     <span class="text-danger text-center"><h3>This Order is not valid </h3></span>
-                @else
+                <?php else: ?>
                     <span class="text-success text-center"><h3>This Order is successfully Delivered</h3></span>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         $(document).ready(function(){
             $("#transaction_code").hide();
@@ -224,4 +204,6 @@
 
     </script>
 
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH G:\All_works\online class\final project\project\laravel\Shop_management\resources\views/order/show.blade.php ENDPATH**/ ?>
