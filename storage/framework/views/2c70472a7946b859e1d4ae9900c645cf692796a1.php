@@ -1,5 +1,3 @@
-
- 
 <?php $__env->startSection('content'); ?>
 <section class="content-header">
 <h1>
@@ -50,8 +48,8 @@
                 </div>
             </div>
             <br>
- 
- 
+
+
             <div class="row products" id="products">
                 <div class="col-md-12">
                     <div class="timeline-body">
@@ -83,8 +81,8 @@
                     </div>
                 </div>
             </div>
- 
- 
+
+
             <div class="row bundles" id="bundles">
                 <div class="col-md-12">
                     <div class="timeline-body">
@@ -112,12 +110,17 @@
             </div>
         </div>
         <div class="col-md-6">
+        <?php if(Auth::user()->is_admin==5): ?>
+                        <?php else: ?>
             <h3>Customer and selected items</h3>
+            <?php endif; ?>
             
             <div class="row">
                 <div class="col-md-12">
-                    <form class="form-horizontal" action="<?php echo e(route('pos.store')); ?>" enctype="multipart/form-data" method="POST">
+                    <form class="form-horizontal" id="insert_form" enctype="multipart/form-data" >
                         <?php echo csrf_field(); ?>
+                        <?php if(Auth::user()->is_admin==5): ?>
+                        <?php else: ?>
                         <div class="box-body">
                             <div class="form-group">
                                 
@@ -203,6 +206,7 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        <?php endif; ?>
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>
@@ -216,7 +220,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
- 
+
                                 </tbody>
                             </table>
                             <div class="row">
@@ -282,22 +286,22 @@
                                         <span class="input-group-addon">
                                             Paid
                                         </span>
-                                        <input type="text" class="form-control" id="paid" name="paid">
+                                        <input type="text" class="form-control" id="paid" name="paid" readonly>
                                     </div>
                                     <!-- /input-group -->
                                 </div>
- 
+
                                 <div class="col-lg-6">
                                     <br>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             Net Pay
                                         </span>
-                                        <input type="text" class="form-control" id="netpay" name="netpay">
+                                        <input type="number" readonly class="form-control" id="netpay" name="netpay">
                                     </div>
                                     <!-- /input-group -->
                                 </div>
- 
+
                                 <div class="col-lg-6">
                                     <br>
                                     <div class="input-group">
@@ -308,45 +312,26 @@
                                     </div>
                                     <!-- /input-group -->
                                 </div>
- 
-                                <div class="col-lg-6">
-                                    <br>
-                                    <div class="input-group">
-                                        <label for="">Payment Method</label>
-                                        <div>
-                                            <input type="radio" name="payment_method" value="Cash" id="payment_cash">
-                                            <label for="">Cash</label>
-                                            
-                                            <input type="radio" name="payment_method" value="Bkash" id="payment_bkash">
-                                            <label for="">Bkash</label>
-                                            <input type="radio" name="payment_method" value="Bank Transaction" id="payment_bank">
-                                            <label for="">Bank</label>
-                                        </div>
-                                    </div>
-                                    <!-- /input-group -->
-                                </div>
- 
-                                <div class="col-lg-6" id="transaction_code">
-                                    <br>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            Tansaction Code
-                                        </span>
-                                        <input type="text" class="form-control" id="transection_value" name="transaction_code">
-                                    </div>
-                                    <!-- /input-group -->
-                                </div>
- 
- 
+
+                                
+
+                                
+
+
+                                
+                                <!-- /.col-lg-6 -->
                                 <div class=" col-lg-12 text-center">
                                     <br>
-                                    <button type="submit"
-                                        style="padding-right: 50px; padding-left: 50px;"
-                                        class="btn btn-lg btn-success" name="makeOrder"
-                                        id="makeOrder">Make Order</button>
+                                    <button class="btn btn-primary btn-lg btn-block"
+                                        id="sslczPayBtn"
+                                        type="submit"
+                                        token="if you have any token validation"
+                                        postdata="your javascript arrays or objects which requires in backend"
+                                        order="If you already have the transaction generated for current order"
+                                        endpoint="<?php echo e(url('/pay-via-ajax')); ?>"
+                                        > Pay Now
+                                    </button>
                                 </div>
-                                <!-- /.col-lg-6 -->
- 
                             </div>
                         </div>
                     </form>
@@ -359,30 +344,80 @@
 </div>
 </div>
 </div>
- 
+
 </section>
 <?php $__env->stopSection(); ?>
- 
+
 <?php $__env->startPush('js'); ?>
- 
+
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
- 
+
+    <script>
+
+        $(document).ready(function(){
+            var obj = {};
+
+            $("#sslczPayBtn").click(function(){
+                obj.cus = $('#customerId').val();
+                obj.amount = $('#netpay').val();
+                $('#sslczPayBtn').prop('postdata', obj);
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8000/api/store_pos",
+                    data : $('#insert_form').serialize(),
+                    dataType : "json",
+                    success: function(data)
+                    {
+                        console.log(data);
+                    }
+                });
+            });
+
+            // $("#insert_form").submit(function(e){
+            // e.preventDefault();
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "http://127.0.0.1:8000/api/store_pos",
+            //         data : $('#insert_form').serialize(),
+            //         dataType : "json",
+            //         success: function(data)
+            //         {
+            //             console.log(data);
+            //         }
+            //     });
+            // });
+
+        });
+
+        (function (window, document) {
+        var loader = function () {
+            var script = document.createElement("script"), tag = document.getElementsByTagName("script")[0];
+            // script.src = "https://seamless-epay.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR LIVE
+            script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR SANDBOX
+            tag.parentNode.insertBefore(script, tag);
+        };
+
+        window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+    })(window, document);
+    </script>
+
     <script>
         $(document).ready(function(){
             // if ($("#discount").change == true) {
             //     alert("Hi");
             // }
- 
+
             $("#discount").change(function(){
                 var netPay = $("#totalAmount").val() - $("#discount").val();
                 document.getElementById("netpay").value = netPay;
+                document.getElementById("paid").value = netPay;
                 // alert(netPay);
             });
         });
     </script>
- 
+
     <script>
         $(document).ready(function(){
             $("#transaction_code").hide();
@@ -393,7 +428,7 @@
                 $("#transaction_code").hide();
             }
         });
- 
+
         $('#payment_bank').on('click', function () {
             if ($(this).prop('checked') == true) {
                 $("#transaction_code").show();
@@ -401,7 +436,7 @@
                 $("#transaction_code").hide();
             }
         });
- 
+
         $('#payment_cash').on('click', function () {
             if ($(this).prop('checked') == true) {
                 $("#transaction_code").hide();
@@ -409,61 +444,61 @@
                 $("#transaction_code").show();
             }
         });
- 
+
     });
- 
+
     </script>
     
- 
- 
- 
- 
+
+
+
+
     <script type="text/javascript">
         $(function() {
             $('.select2').select2()
         });
- 
+
         // function alertOnEmptyCart() {
         //     if (document.getElementById('dynamic_field').rows.length < 2) {
- 
+
         //     }
         // }
         // Search
- 
+
         // Bundle and product showing toggle button
         var productBtn = document.getElementById("productBtn");
         var boundleBtn = document.getElementById("boundleBtn");
- 
+
         var products = document.getElementById("products");
         var bundles = document.getElementById("bundles");
         var categoryTitle = document.getElementById("categoryTitle");
- 
+
         bundles.style.display = "none"
- 
+
         function selectProductShow() {
- 
+
             productBtn.classList.remove("btn-secondary");
             boundleBtn.classList.remove("btn-info");
             productBtn.classList.add("btn-info");
- 
+
             products.style.display = "block"
             bundles.style.display = "none"
             categoryTitle.innerText = "Products"
         }
- 
+
         function selectBundleShow() {
- 
+
             boundleBtn.classList.remove("btn-secondary");
             productBtn.classList.remove("btn-info");
             boundleBtn.classList.add("btn-info");
- 
+
             bundles.style.display = "block"
             products.style.display = "none"
             categoryTitle.innerText = "Boundles"
         }
- 
+
         function selectBundle(id) {
- 
+
             var isRemove = false;
             var styleValue = document.getElementById("img-bn-" + id).style.border;
             console.log(styleValue);
@@ -476,26 +511,26 @@
                 isRemove = false;
                 document.getElementById("img-bn-" + id).style.border = '5px solid green';
             }
- 
+
             fetch('http://127.0.0.1:8000/api/bundle-products/' + id)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(a => onImageClick(a.id, a.unit_price, a.title, a.art_no, a.stock, a.quantity, isRemove, true))
                 });
         }
- 
- 
+
+
         const pId = [
             <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 [<?php echo e($p->id); ?>, "<?php echo e($p->title); ?>" , "<?php echo e($p->art_no); ?>"],
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         ];
- 
+
         var i = 0;
- 
+
         function productSearchFunction() {
             var x = document.getElementById("productSearch").value;
- 
+
             if (x == '') {
                 console.log('All products:');
                 pId.forEach(function(value) {
@@ -541,7 +576,7 @@
                 }
                 document.getElementById("img-" + prodId).style.border = '5px solid green';
                 // add row in cart
- 
+
                 var table = document.getElementById('dynamic_field');
                 var rowCount = document.getElementById('dynamic_field').rows.length;
                 var row = table.insertRow(rowCount);
@@ -554,11 +589,11 @@
                 var cell4 = row.insertCell(4);
                 var cell5 = row.insertCell(5);
                 var cell6 = row.insertCell(6);
- 
+
                 cell0.innerHTML = artNo;
                 cell1.innerHTML = title;
- 
- 
+
+
                 cell2.innerHTML =
                     '<input type="number" name="quantity[]" id="quantity[]" class="form-control qty" value="' +
                     prevQuantity + '" min="1" max="' +
@@ -567,15 +602,15 @@
                     '<input type="text" name="unitPrice[]" class="form-control" value="'+unitPrice+'" onchange="matchUnitAndSubTotal()"/>';
                 cell4.innerHTML =
                     '<input type="text" name="subTotal[]" id="subTotal[]" class="form-control subtotal" value=""/>';
- 
+
                 cell5.innerHTML = '<button type="button" name="remove" id="' + rowCount +
                     '" class="btn btn-danger btn_remove" onclick="removeProductOnCross(' + prodId + ')">X</button>';
- 
+
                 cell6.innerHTML = '<input type="hidden" name="productId[]" id="productId[]" class="form-control" value="' +
                     prodId + '"/>';
             }
         }
- 
+
         function removeProductOnCross(button_id) {
             var rowId = 'row' + button_id;
             var row = document.getElementById(rowId);
@@ -584,7 +619,7 @@
         }
         // Image select End
         // Update Form Fileds
- 
+
         function calculatex() {
             var table = document.getElementById("dynamic_field");
             var totQty = 0;
@@ -596,7 +631,7 @@
             }
             var totalQty = document.getElementById('totalQty');
             totalQty.value = sum;
- 
+
             const val2 = document.querySelectorAll('.form-control.subtotal');
             let sum2 = 0.0;
             for (let v of val2) {
@@ -605,33 +640,35 @@
             }
             // var returnDateElement = document.getElementById('returnDate');
             // var returnDate = returnDateElement.value;
- 
+
             // Start date new added
             var startDateElement = document.getElementById('startDate');
             var startDate = startDateElement.value;
- 
+
             // const date1 = new Date(returnDate);
             // const date2 = new Date(startDate);
             // const diffTime = Math.abs(date2 - date1) + 1;
             // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
- 
+
             // Showing time difference from start date to end date
             // document.getElementById("rentTime").innerHTML = diffDays + " days for rent";
- 
+
             var totalAmount = document.getElementById('totalAmount');
             totalAmount.value = sum2;
- 
+
             // diffDays
             //     ?
             //     totalAmount.value = sum2 * diffDays :
             //     totalAmount.value = sum2;
- 
+
             var netPay =  document.getElementById('netpay');
+            var paid =  document.getElementById('paid');
             netPay.value = sum2;
- 
- 
+            paid.value = sum2;
+
+
         }
- 
+
         function matchUnitAndSubTotal() {
             var table = document.getElementById('dynamic_field');
             for (var i = 1, row; row = table.rows[i]; i++) {
@@ -639,18 +676,18 @@
                     .querySelector("input").value;
             }
         }
- 
+
         function checkButton() {
-            var button = document.getElementById('makeOrder');
+            var button = document.getElementById('sslczPayBtn');
             if (document.getElementById('dynamic_field').getElementsByTagName('tr').length > 1) {
                 button.style.display = '';
             } else {
                 button.style.display = 'none';
             }
         }
- 
- 
- 
+
+
+
         $(function() {
             $('.datetimepicker1').daterangepicker({
                 autoUpdateInput: false,
@@ -666,13 +703,14 @@
             $('.datetimepicker1').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
- 
+
             $(document).ready(function() {
                 setInterval("checkButton()", 500);
             });
         });
- 
+
     </script>
- 
+
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.app2', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\dokan\resources\views/pos/index.blade.php ENDPATH**/ ?>

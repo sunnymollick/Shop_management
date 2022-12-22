@@ -166,7 +166,7 @@
     <label for="exampleInputPassword1">Confirm Password</label>
     <input type="password" class="form-control" name="password_confirmation" id="exampleInputConfirmPassword1">
   </div>
-  
+
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     <button type="submit" class="btn btn-primary">Save changes</button>
@@ -185,31 +185,30 @@
 
 
 
-              <div class="row gutters-sm">
+              {{-- <div class="row gutters-sm">
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
+                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2"></i>My Orders</h6>
+                      @php
+                          $customer_info = DB::table('customers')->where('email',Auth::user()->email)->first();
+                          $orders = DB::table('orders')->where('customer_id',$customer_info->id)->get();
+                      @endphp
+                    <table class="table table-bordered table-striped table-responsive">
+                        <thead class="table-striped">
+                            <tr>No.</tr>
+                            <tr>Order Status</tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $i = 1;
+                            @endphp
+                            @foreach ($orders as $row)
+                                <tr>{{ $i++ }}</tr>
+                                <tr>{{ $row->status_code }}</tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     </div>
                   </div>
                 </div>
@@ -240,7 +239,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> --}}
 
 
 
@@ -371,7 +370,7 @@
 <!-- @endif
 
 
-                @if(Auth::user()->is_admin==5)
+@if(Auth::user()->is_admin==5)
 @else -->
  <!-- <div class="col-md-6">
     <div class="box">
@@ -490,9 +489,9 @@
                             <td>
                                 @php
                                     $customer = DB::table('orders')->join('customers','orders.customer_id','customers.id')
-                                                                    ->select('customers.name as customer')
-                                                                    ->where('customers.id',$row->order)
-                                                                    ->first();
+                                                    ->select('customers.name as customer')
+                                                    ->where('customers.id',$row->order)
+                                                    ->first();
                                 @endphp
                                 {{ $customer->customer }}
                             </td>
@@ -610,6 +609,20 @@
     <script>
         $(function() {
             $('#example2').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false,
+                "order": [[ 0, "desc" ]]
+            })
+        });
+
+    </script>
+    <script>
+        $(function() {
+            $('#example3').DataTable({
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,

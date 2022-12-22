@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/bundle-products/{id}', 'BundleApiController@bundleById');
 Route::get('get/order/status/{id}',[OrderController::class, 'getOrderStatus']);
-
+Route::post('store_pos',[PosController::class,'store']);
 
 // Route::post('/patients', 'SMS\PatientController@store');

@@ -57,7 +57,7 @@ class PosController extends Controller
         $show_receipt = false;
 
         // Create new customer
-       
+
         if (isset($request->customerName)) {
             $customer = new Customer();
             $customer->name = $request->customerName;
@@ -96,6 +96,7 @@ class PosController extends Controller
             $customerId = Auth::user()->id;
             $customerName = Auth::user()->name;
         }
+
         $discount = 0;
         if (isset($request->discount)) {
             $discount = $request->discount;
@@ -174,7 +175,7 @@ class PosController extends Controller
             $order = Order::findOrFail($orderId);
             $order->total_quantity = $total_quantity;
             $order->save();
-            
+
         }
 
         // create invoice
@@ -227,10 +228,10 @@ class PosController extends Controller
             $account->save();
 
         }
-        
+
 
         // return back();
-        return redirect()->route('orders.show', $orderId);
+        // return redirect()->route('orders.show', $orderId);
         // return to OrderViewById -> This will contain buttons for invoice and receipt
 
 

@@ -76,7 +76,7 @@ class SettingController extends Controller
             $image           = $request->file('customFile');
             $name            = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/logo');
-            $file_path       = 'public/uploads/logo/'.$name;
+            $file_path       = 'uploads/logo/'.$name;
             $image->move($destinationPath, $name);
         }
 

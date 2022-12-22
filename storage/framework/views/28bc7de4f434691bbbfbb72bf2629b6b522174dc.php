@@ -1,5 +1,6 @@
 <?php $__env->startSection('content'); ?>
 
+
 <section class="content-header">
     <h1>
     Dashboard
@@ -28,7 +29,7 @@
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>John Doe</h4>
+                      <h4> <?php echo e(Auth::user()->name); ?></h4>
                       <p class="text-secondary mb-1">Full Stack Developer</p>
                       <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                       <button class="btn btn-primary">Follow</button>
@@ -120,68 +121,74 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-12">
-                      <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                      <button type="button" class="btn btn-info " data-toggle="modal" data-target="#exampleModalCenter">Edit</button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="row gutters-sm">
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Update information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="<?php echo e(route('customers.update',$user->id)); ?>" method="POST" enctype="multipart/form-data">
+       <?php echo csrf_field(); ?>
+       <?php echo e(method_field('PUT')); ?>
+
+        <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text" class="form-control" id="exampleInputName1" name="name" value="<?php echo e($user->name); ?>" aria-describedby="nameHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="<?php echo e($user->email); ?>" aria-describedby="emailHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Mobile</label>
+    <input type="text" class="form-control" name="mobile" value="<?php echo e($user->mobile); ?>" id="exampleInputphone1" aria-describedby="emailHelp">
+  </div>
+        <div class="form-group">
+    <label for="exampleInputEmail1">Address</label>
+    <input type="text" class="form-control" name="address" value="<?php echo e($user->address); ?>" id="exampleInputAddress" aria-describedby="addressHelp">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Old Password</label>
+    <input type="password" class="form-control" name="oldPassword" id="exampleInputPassword1">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">New Password</label>
+    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Confirm Password</label>
+    <input type="password" class="form-control" name="password_confirmation" id="exampleInputConfirmPassword1">
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+              
 
 
 
@@ -190,7 +197,7 @@
     <?php else: ?>
     <div class="row">
 
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
         <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
@@ -206,7 +213,7 @@
         </div>
 
         <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
         <!-- small box -->
             <div class="small-box bg-green">
                 <div class="inner">
@@ -223,7 +230,7 @@
         <!-- ./col -->
 
         <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
         <!-- small box -->
             <div class="small-box bg-yellow">
                 <div class="inner">
@@ -239,7 +246,7 @@
         </div>
         <!-- ./col -->
         <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
             <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
@@ -253,7 +260,7 @@
                     <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-2 col-xs-6">
+            <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-teal">
                     <div class="inner">
@@ -267,7 +274,35 @@
                     <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-2 col-xs-6">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                    <div class="small-box bg-orange">
+                        <div class="inner">
+                        <h4>Total <?php echo e($total_orders); ?></h4>
+
+                        <p>Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                        </div>
+                        <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                    <div class="small-box bg-orange">
+                        <div class="inner">
+                        <h4>Total <?php echo e($total_orders); ?></h4>
+
+                        <p>Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                        </div>
+                        <a href="<?php echo e(route('customers.index')); ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                     <div class="small-box bg-orange">
                         <div class="inner">
@@ -284,14 +319,13 @@
 <!-- <?php endif; ?>
 
 
-                <?php if(Auth::user()->is_admin==5): ?>
+<?php if(Auth::user()->is_admin==5): ?>
 <?php else: ?> -->
- <div class="col-md-6">
+ <!-- <div class="col-md-6">
     <div class="box">
         <div class="box-header">
             <h3 class="box-title text-danger">Products Alert</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <table id="example1" class="table table-bordered table-striped table-responsive">
                 <thead>
@@ -367,7 +401,6 @@
                 </tfoot>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
 </div>
 <div class="col-md-6">
@@ -375,7 +408,6 @@
         <div class="box-header">
             <h3 class="box-title text-success">Recent Sale</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <table id="example2" class="table table-bordered table-striped table-responsive">
                 <thead>
@@ -401,9 +433,9 @@
                             <td>
                                 <?php
                                     $customer = DB::table('orders')->join('customers','orders.customer_id','customers.id')
-                                                                    ->select('customers.name as customer')
-                                                                    ->where('customers.id',$row->order)
-                                                                    ->first();
+                                                    ->select('customers.name as customer')
+                                                    ->where('customers.id',$row->order)
+                                                    ->first();
                                 ?>
                                 <?php echo e($customer->customer); ?>
 
@@ -431,9 +463,8 @@
                 </tfoot>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
-</div>
+</div> -->
 <?php endif; ?>
     </div>
 
@@ -496,6 +527,20 @@
     <script>
         $(function() {
             $('#example2').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false,
+                "order": [[ 0, "desc" ]]
+            })
+        });
+
+    </script>
+    <script>
+        $(function() {
+            $('#example3').DataTable({
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
