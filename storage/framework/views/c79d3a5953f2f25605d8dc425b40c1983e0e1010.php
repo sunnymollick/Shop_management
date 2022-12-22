@@ -30,8 +30,8 @@
                     <div class="box-body">
                         <div class="col-md-6">
                             <form class="form-horizontal" id="formId" action="<?php echo e(route('category.store')); ?>"
-                                  method="POST"
-                                  enctype="multipart/form-data">
+                                method="POST"
+                                enctype="multipart/form-data">
                                 <?php echo csrf_field(); ?>
                                 <input type="hidden" name="id">
                                 <div class="box-body">

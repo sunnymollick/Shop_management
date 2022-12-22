@@ -194,7 +194,7 @@ class CustomerController extends Controller
             $destinationPath = public_path('/customer_image');
             $file_path       = 'customer_image/' . $name;
             $image->move($destinationPath, $name);
-            unlink($customer->image);
+            // unlink($customer->image);
 
             $customer->image  = $file_path;
 

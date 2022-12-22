@@ -165,7 +165,7 @@ class ProductController extends Controller
             $destinationPath = public_path('/uploads');
             $file_path       = 'uploads/' . $name;
             $image->move($destinationPath, $name);
-            unlink($product->image_path);
+            // unlink($product->image_path);
 
             $product->image_path  = $file_path;
 
