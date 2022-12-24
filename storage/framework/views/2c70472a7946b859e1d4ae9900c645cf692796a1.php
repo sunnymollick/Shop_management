@@ -111,16 +111,15 @@
         </div>
         <div class="col-md-6">
         <?php if(Auth::user()->is_admin==5): ?>
-                        <?php else: ?>
+            <?php else: ?>
             <h3>Customer and selected items</h3>
             <?php endif; ?>
-            
+
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" id="insert_form" enctype="multipart/form-data" >
                         <?php echo csrf_field(); ?>
-                        <?php if(Auth::user()->is_admin==5): ?>
-                        <?php else: ?>
+                        
                         <div class="box-body">
                             <div class="form-group">
                                 
@@ -129,7 +128,15 @@
                                         name="customerId" style="width: 100%;">
                                         <option value="" selected>Select Register Customer</option>
                                         <?php $__currentLoopData = $customers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $customer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($customer->id .','. $customer->name); ?>">
+                                            <option value="<?php echo e($customer->id .','. $customer->name); ?>"
+                                                <?php if(Auth::user()->name == $customer->name): ?>
+                                                    selected
+                                                <?php endif; ?>
+                                                <?php if(Auth::user()->is_admin != 1 &&  Auth::user()->name != $customer->name): ?>
+                                                    disabled
+                                                
+                                                <?php endif; ?>
+                                                >
                                                 <?php echo e($customer->name); ?>
 
                                                 - <?php echo e($customer->mobile); ?></option>
@@ -138,75 +145,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="box box-default collapsed-box" style="width: 80%;">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Add New Customer</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool"
-                                        data-widget="collapse">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                                <!-- /.box-tools -->
-                            </div>
-                            <!-- /.box-header -->
-                            <div class="box-body">
-                                <div class="form-group">
-                                    <label for="customerName" class="col-sm-3 control-label">Business Name
-                                        *</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="customerName"
-                                            name="customerName" placeholder="Name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="mobile" class="col-sm-3 control-label">Mobile</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="mobile"
-                                            name="mobile" placeholder="Mobile">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="passport"
-                                        class="col-sm-3 control-label">Email</label>
-                                    <div class="col-sm-9">
-                                        <input type="email" class="form-control" id="passport"
-                                            name="passport" placeholder="Email">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="image"
-                                        class="col-sm-3 control-label">Image</label>
-                                    <div class="col-sm-9">
-                                        <input type="file" class="form-control" id="image"
-                                            name="image" placeholder="">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="address" class="col-sm-3 control-label">Address</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="address"
-                                            name="address" placeholder="Address">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nid" class="col-sm-3 control-label">ID</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="nid" name="nid"
-                                            placeholder="NID or Passport">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="comment" class="col-sm-3 control-label">Comment</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="comment"
-                                            name="comment" placeholder="Comment">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <?php endif; ?>
+                        
+                        
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>
@@ -363,6 +303,7 @@
                 obj.cus = $('#customerId').val();
                 obj.amount = $('#netpay').val();
                 $('#sslczPayBtn').prop('postdata', obj);
+
                 $.ajax({
                     type: "POST",
                     url: "http://127.0.0.1:8000/api/store_pos",
@@ -373,6 +314,7 @@
                         console.log(data);
                     }
                 });
+
             });
 
             // $("#insert_form").submit(function(e){
