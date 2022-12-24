@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
 use App\Order;
+use Illuminate\Support\Facades\Auth;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -94,9 +95,16 @@ class SslCommerzPaymentController extends Controller
     {
         $request_data = (array) json_decode($request->cart_json);
 
-        $customerInfo = explode(",", $request_data["cus"]);
-        $customerId = $customerInfo[0];
-        $customerName = $customerInfo[1];
+        if (isset($request_data["cus"])) {
+            $customerInfo = explode(",", $request_data["cus"]);
+            $customerId = $customerInfo[0];
+            $customerName = $customerInfo[1];
+            $customer = Customer::find($customerId);
+        } else if(!isset($request_data["cus"])){
+            $customer = Customer::where('email',Auth::user()->email)->first();
+            $customerId = $customer->id;
+            $customerName = $customer->name;
+        }
 
         $post_data = array();
         $post_data['total_amount'] = $request_data["amount"]; # You cant not pay less than 10
@@ -105,24 +113,24 @@ class SslCommerzPaymentController extends Controller
 
         # CUSTOMER INFORMATION
         $post_data['cus_name'] = $customerName;
-        $post_data['cus_email'] = 'customer@mail.com';
-        $post_data['cus_add1'] = 'Customer Address';
+        $post_data['cus_email'] = $customer->email;
+        $post_data['cus_add1'] = $customer->address;
         $post_data['cus_add2'] = "";
         $post_data['cus_city'] = "";
         $post_data['cus_state'] = "";
         $post_data['cus_postcode'] = "";
         $post_data['cus_country'] = "Bangladesh";
-        $post_data['cus_phone'] = '8801521325825';
+        $post_data['cus_phone'] = $customer->mobile;
         $post_data['cus_fax'] = "";
 
         # SHIPMENT INFORMATION
-        $post_data['ship_name'] = "Store Test";
-        $post_data['ship_add1'] = "Dhaka";
+        $post_data['ship_name'] = $customerName;
+        $post_data['ship_add1'] = $customer->delivery_address;
         $post_data['ship_add2'] = "Dhaka";
         $post_data['ship_city'] = "Dhaka";
         $post_data['ship_state'] = "Dhaka";
         $post_data['ship_postcode'] = "1000";
-        $post_data['ship_phone'] = "";
+        $post_data['ship_phone'] = $customer->mobile;
         $post_data['ship_country'] = "Bangladesh";
 
         $post_data['shipping_method'] = "NO";

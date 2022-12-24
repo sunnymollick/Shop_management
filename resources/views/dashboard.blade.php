@@ -178,13 +178,6 @@
 </div>
 
 
-
-
-
-
-
-
-
               {{-- <div class="row gutters-sm">
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">

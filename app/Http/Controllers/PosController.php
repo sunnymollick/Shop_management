@@ -50,10 +50,6 @@ class PosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        // dd($request->all());
-        // return $request;
-        // $customerId = 1;
-        // $customerName = 'Walk-in Customer';
         $show_receipt = false;
 
         // Create new customer
@@ -93,8 +89,9 @@ class PosController extends Controller
             $customerId = $customerInfo[0];
             $customerName = $customerInfo[1];
         }else{
-            $customerId = Auth::user()->id;
-            $customerName = Auth::user()->name;
+            $customer = Customer::where('email',Auth::user()->email)->first();
+            $customerId = $customer->id;
+            $customerName = $customer->name;
         }
 
         $discount = 0;

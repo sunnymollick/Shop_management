@@ -109,16 +109,16 @@
         </div>
         <div class="col-md-6">
         @if(Auth::user()->is_admin==5)
-                        @else
+            @else
             <h3>Customer and selected items</h3>
             @endif
-            {{--  --}}
+
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" id="insert_form" enctype="multipart/form-data" >
                         @csrf
-                        @if(Auth::user()->is_admin==5)
-                        @else
+                        {{-- @if(Auth::user()->is_admin==5)
+                        @else --}}
                         <div class="box-body">
                             <div class="form-group">
                                 {{-- <label for="inputPatient" class="col-sm-2 control-label">Patient</label> --}}
@@ -127,7 +127,15 @@
                                         name="customerId" style="width: 100%;">
                                         <option value="" selected>Select Register Customer</option>
                                         @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id .','. $customer->name }}">
+                                            <option value="{{ $customer->id .','. $customer->name }}"
+                                                @if (Auth::user()->name == $customer->name)
+                                                    selected
+                                                @endif
+                                                @if (Auth::user()->is_admin != 1 &&  Auth::user()->name != $customer->name)
+                                                    disabled
+                                                
+                                                @endif
+                                                >
                                                 {{ $customer->name }}
                                                 - {{ $customer->mobile }}</option>
                                         @endforeach
@@ -135,7 +143,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="box box-default collapsed-box" style="width: 80%;">
+                        {{-- <div class="box box-default collapsed-box" style="width: 80%;">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Add New Customer</h3>
                                 <div class="box-tools pull-right">
@@ -202,8 +210,8 @@
                                 </div>
                             </div>
                             <!-- /.box-body -->
-                        </div>
-                        @endif
+                        </div> --}}
+                        {{-- @endif --}}
                         <div class="col-md-11">
                             <table class="table table-hover" id="dynamic_field" onchange="">
                                 <thead>
@@ -398,6 +406,7 @@
                 obj.cus = $('#customerId').val();
                 obj.amount = $('#netpay').val();
                 $('#sslczPayBtn').prop('postdata', obj);
+
                 $.ajax({
                     type: "POST",
                     url: "http://127.0.0.1:8000/api/store_pos",
@@ -408,6 +417,7 @@
                         console.log(data);
                     }
                 });
+
             });
 
             // $("#insert_form").submit(function(e){
