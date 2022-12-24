@@ -41,15 +41,15 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
-        <link rel="stylesheet" type="text/css" 
+        <link rel="stylesheet" type="text/css"
      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-	
+
 <style>
     body{
     margin-top:20px;
     color: #1a202c;
     text-align: left;
-    background-color: #e2e8f0;    
+    background-color: #e2e8f0;
 }
 .main-body {
     padding: 15px;
@@ -252,7 +252,13 @@
                     <?php if((Auth::user()->is_admin) == 1 || (Auth::user()->is_admin) == 0|| (Auth::user()->is_admin) == 5 ): ?>
                     <li class="<?php echo e(Request::is('pos*') ? 'active' : ''); ?>">
                         <a href="<?php echo e(route('pos.index')); ?>">
-                            <i class="fa fa-line-chart"></i> <span><?php if((Auth::user()->is_admin) == 5): ?> Place Order <?php else: ?> Point Of Sale <?php endif; ?></span>
+                            <i class="fa fa-line-chart"></i> <span>
+                                <?php if(Auth::user()->is_admin == 5): ?>
+                                    Place Order
+                                <?php else: ?>
+                                    Point Of Sale
+                                <?php endif; ?>
+                            </span>
                         </a>
                     </li>
                     <?php endif; ?>
